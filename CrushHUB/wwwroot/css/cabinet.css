@@ -276,7 +276,15 @@
 }
 
 .member-actions {
-    text-align: right;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.edit-user-note {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--fg-muted);
 }
 
 .role-select {

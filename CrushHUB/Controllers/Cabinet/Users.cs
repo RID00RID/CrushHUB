@@ -14,13 +14,88 @@ public partial class CabinetController
 
     [HttpGet]
     [Authorize(Roles = RoleNames.Admin)]
-    public async Task<IActionResult> Users(bool create = false)
+    public async Task<IActionResult> Users(bool create = false, string? edit = null)
     {
         if (await LoadShell(UsersTab) is null)
             return RedirectToAction("Login", "Account");
 
-        return View(await BuildUsersViewModel(create));
+        EditUserViewModel? editing = null;
+
+        if (!string.IsNullOrEmpty(edit) && await _users.FindByIdAsync(edit) is { } target)
+            editing = ToEditModel(target);
+
+        return View(await BuildUsersViewModel(create, edit: editing));
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = RoleNames.Admin)]
+    public async Task<IActionResult> EditUser(EditUserViewModel edit)
+    {
+        if (await LoadShell(UsersTab) is null)
+            return RedirectToAction("Login", "Account");
+
+        AppUser? user = await _users.FindByIdAsync(edit.Id);
+
+        if (user is null)
+            return RedirectToAction(nameof(Users));
+
+        if (!ModelState.IsValid)
+            return View(nameof(Users), await BuildUsersViewModel(false, edit: Merge(user, edit)));
+
+        user.DisplayName = edit.Name!.Trim();
+
+        IdentityResult saved = await _users.UpdateAsync(user);
+
+        if (!saved.Succeeded)
+        {
+            AddErrors(saved, nameof(EditUserViewModel.Name), edit);
+            return View(nameof(Users), await BuildUsersViewModel(false, edit: Merge(user, edit)));
+        }
+
+        if (!string.IsNullOrEmpty(edit.NewPassword))
+        {
+            // Текущий пароль администратор не знает, поэтому меняем через токен сброса.
+            string token = await _users.GeneratePasswordResetTokenAsync(user);
+            IdentityResult reset = await _users.ResetPasswordAsync(user, token, edit.NewPassword);
+
+            if (!reset.Succeeded)
+            {
+                AddErrors(reset, nameof(EditUserViewModel.NewPassword), edit);
+                return View(nameof(Users), await BuildUsersViewModel(false, edit: Merge(user, edit)));
+            }
+
+            // Себе сменили пароль — обновляем куку, иначе вылетим из системы.
+            if (IsCurrentUser(user))
+                await _signIn.RefreshSignInAsync(user);
+        }
+
+        return RedirectToAction(nameof(Users));
+    }
+
+    private void AddErrors(IdentityResult result, string field, EditUserViewModel edit)
+    {
+        foreach (IdentityError error in result.Errors)
+            ModelState.AddModelError($"Edit.{field}", error.Description);
+    }
+
+    private static EditUserViewModel ToEditModel(AppUser user) => new()
+    {
+        Id = user.Id,
+        UserName = user.UserName ?? string.Empty,
+        Email = user.Email ?? string.Empty,
+        Name = string.IsNullOrWhiteSpace(user.DisplayName) ? user.UserName : user.DisplayName
+    };
+
+    /// <summary>Возвращает введённое админом поверх опознавательных полей из базы.</summary>
+    private static EditUserViewModel Merge(AppUser user, EditUserViewModel edit) => new()
+    {
+        Id = user.Id,
+        UserName = user.UserName ?? string.Empty,
+        Email = user.Email ?? string.Empty,
+        Name = edit.Name,
+        NewPassword = edit.NewPassword
+    };
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -126,7 +201,8 @@ public partial class CabinetController
 
     private bool IsCurrentUser(AppUser user) => user.Id == _users.GetUserId(User);
 
-    private async Task<UsersViewModel> BuildUsersViewModel(bool isCreating, CreateUserViewModel? create = null)
+    private async Task<UsersViewModel> BuildUsersViewModel(bool isCreating, CreateUserViewModel? create = null,
+        EditUserViewModel? edit = null)
     {
         List<AppUser> users = await _users.Users.OrderBy(u => u.UserName).ToListAsync();
         List<MemberViewModel> members = [];
@@ -151,6 +227,7 @@ public partial class CabinetController
             Members = members,
             Create = create ?? new CreateUserViewModel(),
             IsCreating = isCreating,
+            Edit = edit,
             Error = TempData[UsersErrorKey] as string
         };
     }
