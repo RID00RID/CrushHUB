@@ -1,10 +1,12 @@
 # CrashHub
 
-Self-hosted приём крашей и обращений игроков из игры на Unreal Engine. Игра шлёт данные по HTTP, команда разбирает их в веб-панели.
+Self-hosted приём крашей и обращений игроков. Игра шлёт данные обычным HTTP-запросом с JSON, команда разбирает их в веб-панели.
+
+**Подходит любому движку** — Unreal, Unity, Godot, GameMaker, собственный: SDK не нужен, достаточно уметь отправить POST. Справочник запросов — [API.md](API.md).
 
 ## Возможности
 
-- **Проекты** — по проекту на игру, у каждого свой ключ приложения для SDK.
+- **Проекты** — по проекту на игру, у каждого свой ключ приложения.
 - **Crash Report** — список крашей с фильтром по статусу и сортировкой по дате, карточка с callstack.
 - **User Report** — обращения игроков с категориями, статусами, скриншотом и сортировкой по дате или статусу.
 - **Пользователи** — машины игроков: конфигурация железа, её краши и обращения.
@@ -13,11 +15,11 @@ Self-hosted приём крашей и обращений игроков из и
 
 ## Стек
 
-ASP.NET Core MVC (.NET 10), EF Core + SQL Server, ASP.NET Core Identity. Никаких внешних зависимостей на фронте — обычные Razor-страницы и немного ванильного JS.
+ASP.NET Core MVC (.NET 10), EF Core, ASP.NET Core Identity. Никаких внешних зависимостей на фронте — обычные Razor-страницы и немного ванильного JS.
 
 ## Запуск
 
-Нужны .NET SDK 10 и SQL Server (подойдёт Express или LocalDB).
+Нужны .NET SDK 10 и SQL Server (подойдёт Express или LocalDB) — про другие базы ниже.
 
 1. Пропишите строку подключения в `CrushHUB/appsettings.json`:
 
@@ -45,94 +47,42 @@ ASP.NET Core MVC (.NET 10), EF Core + SQL Server, ASP.NET Core Identity. Ник�
 
 Панель откроется на `http://localhost:5045`. Первый вход — логин `admin`, пароль `admin`. **Смените пароль сразу после первого запуска**, эта учётная запись заводится миграцией и одинакова у всех.
 
+## База данных
+
+Из коробки подключён **SQL Server** — под него собраны миграции в `CrushHUB/Migrations`.
+
+Проект работает через EF Core, поэтому переносится на другую базу сменой провайдера:
+
+1. Поставьте пакет нужного провайдера вместо `Microsoft.EntityFrameworkCore.SqlServer`:
+
+   | База | Пакет |
+   | --- | --- |
+   | PostgreSQL | `Npgsql.EntityFrameworkCore.PostgreSQL` |
+   | MySQL / MariaDB | `Pomelo.EntityFrameworkCore.MySql` |
+   | SQLite | `Microsoft.EntityFrameworkCore.Sqlite` |
+
+2. Замените одну строку в `Program.cs`:
+
+   ```csharp
+   options.UseSqlServer(appConfig.Database.ConnectionString)   // было
+   options.UseNpgsql(appConfig.Database.ConnectionString)      // стало
+   ```
+
+3. Пересоберите миграции — они привязаны к диалекту базы и от SQL Server не подойдут:
+
+   ```bash
+   rm -r CrushHUB/Migrations
+   dotnet ef migrations add Initial --project CrushHUB/CrushHUB.csproj
+   dotnet ef database update --project CrushHUB/CrushHUB.csproj
+   ```
+
+Код приложения при этом не меняется: обращения к данным идут через `IRepository<T>` и не зависят от конкретной базы.
+
 ## API приёма данных
 
-Все запросы требуют заголовок `X-Api-Key` с ключом проекта — он лежит в панели в разделе «Настройки» проекта. Ключ должен принадлежать проекту, указанному в адресе, иначе `401`.
+Игра общается с сервером обычным HTTP + JSON — примеры запросов, поля, коды ошибок и порядок вызовов вынесены в отдельный файл: **[API.md](API.md)**.
 
-Базовый адрес: `{сервер}/ingest/{projectId}`.
-
-### Проверка ключа
-
-```http
-GET /ingest/1/ping
-X-Api-Key: ch_live_...
-```
-
-```json
-{ "projectId": 1, "project": "Skyward Rift" }
-```
-
-### Конфигурация машины игрока
-
-Вызывается, когда игрок согласился делиться данными о системе. Повторный вызов с тем же `SystemID` обновляет конфигурацию, дубликата не создаёт.
-
-```http
-POST /ingest/1/users
-X-Api-Key: ch_live_...
-Content-Type: application/json
-```
-
-```json
-{
-  "UserConfig": {
-    "SystemID": "9B41C7D2-1A55-4E90-8C31-77AA0E5512FF",
-    "os": { "name": "Windows 11 Pro", "version": "10.0.26200" },
-    "CPU": "AMD Ryzen 9 7900X 12-Core Processor",
-    "GPU": "NVIDIA GeForce RTX 3080 Ti",
-    "Memory": "64629"
-  }
-}
-```
-
-Обёртка `UserConfig` необязательна — можно прислать сам объект. Обязателен только `SystemID`, остальные поля произвольны: JSON сохраняется целиком, незнакомые поля не теряются. `Memory` — в мегабайтах. Пример реального файла — [user-config.example.json](user-config.example.json).
-
-Ответ: `{ "id": 2, "systemId": "9B41C7D2-..." }`.
-
-### Краш
-
-```http
-POST /ingest/1/crashes
-```
-
-```json
-{
-  "title": "Fatal error: Access violation - code 0xC0000005",
-  "callstack": "UnrealEditor-Engine!AActor::TickActor()\nUnrealEditor-Core!FEngineLoop::Tick()",
-  "version": "1.4.2",
-  "platform": "Windows",
-  "userId": "9B41C7D2-1A55-4E90-8C31-77AA0E5512FF",
-  "occurredAt": "2026-08-14T11:30:00Z"
-}
-```
-
-Обязателен только `title` (до 300 символов). `userId` — это `SystemID` машины; если конфигурацию ещё не присылали, машина заведётся автоматически. Без `occurredAt` берётся время получения. Ответ: `201` и `{ "id": 12 }`.
-
-### Обращение игрока
-
-```http
-POST /ingest/1/reports
-```
-
-```json
-{
-  "category": "Производительность",
-  "description": "Просадки FPS на локации «Старый порт».",
-  "userId": "9B41C7D2-1A55-4E90-8C31-77AA0E5512FF",
-  "createdAt": "2026-08-14T12:00:00Z",
-  "screenshot": "data:image/png;base64,iVBORw0KGgo..."
-}
-```
-
-Обязательны `category` и `description`. `screenshot` — PNG или JPEG в base64 до 5 МБ, формат проверяется по сигнатуре файла; сохраняется в `wwwroot/uploads/{projectId}/`. Ответ: `201` и `{ "id": 7, "screenshot": "/uploads/1/....png" }`.
-
-### Ошибки
-
-| Код | Когда |
-| --- | --- |
-| `400` | Не прошла валидация тела, битый base64 или неподдерживаемый формат скриншота |
-| `401` | Ключ не передан, неизвестен или принадлежит другому проекту |
-
-Если игрок отказался делиться данными — не вызывайте `/users` и не передавайте `userId`. Краши и обращения сохранятся без привязки к машине.
+Коротко: ключ проекта передаётся заголовком `X-Api-Key`, базовый адрес — `{сервер}/ingest/{projectId}`, три метода — конфигурация машины (`/users`), краш (`/crashes`) и обращение игрока (`/reports`), плюс `/ping` для проверки ключа.
 
 ## Структура
 
