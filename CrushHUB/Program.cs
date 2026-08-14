@@ -17,7 +17,7 @@ IConfigurationBuilder configBuild = new ConfigurationBuilder()
 IConfiguration configuration = configBuild.Build();
 AppConfig appConfig = configuration.GetSection("Project").Get<AppConfig>()!;
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(appConfig.Database.ConnectionString)
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(appConfig.Database.ConnectionString)
     .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>

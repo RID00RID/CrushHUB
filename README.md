@@ -19,14 +19,14 @@ ASP.NET Core MVC (.NET 10), EF Core, ASP.NET Core Identity. Никаких вн�
 
 ## Запуск
 
-Нужны .NET SDK 10 и SQL Server (подойдёт Express или LocalDB) — про другие базы ниже.
+Нужны .NET SDK 10 и PostgreSQL 13+ (ветка `main` работает на SQL Server).
 
 1. Пропишите строку подключения в `CrushHUB/appsettings.json`:
 
    ```json
    "Project": {
      "Database": {
-       "ConnectionString": "Server=localhost;Database=CrushHUB;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True"
+       "ConnectionString": "Host=localhost;Port=5432;Database=crushhub;Username=postgres;Password=postgres"
      }
    }
    ```
@@ -49,7 +49,19 @@ ASP.NET Core MVC (.NET 10), EF Core, ASP.NET Core Identity. Никаких вн�
 
 ## База данных
 
-Из коробки подключён **SQL Server** — под него собраны миграции в `CrushHUB/Migrations`.
+> **Ветка `postgres`.** Здесь подключён PostgreSQL: провайдер `Npgsql.EntityFrameworkCore.PostgreSQL`,
+> миграции пересобраны под его диалект. Вариант под SQL Server — в ветке `main`.
+
+Строка подключения в `CrushHUB/appsettings.json`:
+
+```
+Host=localhost;Port=5432;Database=crushhub;Username=postgres;Password=postgres
+```
+
+PostgreSQL хранит время как `timestamptz` и принимает только UTC, поэтому время из входящих
+запросов приводится к UTC: если игра прислала момент без часового пояса, он считается UTC.
+
+### Другая база
 
 Проект работает через EF Core, поэтому переносится на другую базу сменой провайдера:
 

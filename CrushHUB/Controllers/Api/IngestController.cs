@@ -85,7 +85,7 @@ public class IngestController : ControllerBase
             Callstack = request.Callstack,
             Version = request.Version,
             Platform = request.Platform,
-            OccurredAt = request.OccurredAt ?? DateTime.UtcNow,
+            OccurredAt = ToUtc(request.OccurredAt),
             Status = CrashStatus.Open
         };
 
@@ -124,7 +124,7 @@ public class IngestController : ControllerBase
             Category = request.Category.Trim(),
             Description = request.Description.Trim(),
             ScreenshotPath = screenshotPath,
-            CreatedAt = request.CreatedAt ?? DateTime.UtcNow,
+            CreatedAt = ToUtc(request.CreatedAt),
             Status = ReportStatus.Open
         };
 
@@ -133,6 +133,18 @@ public class IngestController : ControllerBase
 
         return Created($"/Home/Reports/{project.Id}?report={report.Id}", new { id = report.Id, screenshot = screenshotPath });
     }
+
+    /// <summary>
+    /// PostgreSQL хранит время как timestamptz и принимает только UTC. Игра может прислать
+    /// время без часового пояса — считаем его UTC, местное приводим.
+    /// </summary>
+    private static DateTime ToUtc(DateTime? value) => value?.Kind switch
+    {
+        null => DateTime.UtcNow,
+        DateTimeKind.Utc => value.Value,
+        DateTimeKind.Local => value.Value.ToUniversalTime(),
+        _ => DateTime.SpecifyKind(value.Value, DateTimeKind.Utc)
+    };
 
     /// <summary>Ключ из заголовка должен принадлежать именно тому проекту, что указан в адресе.</summary>
     private async Task<Project?> Authorize(int projectId)
