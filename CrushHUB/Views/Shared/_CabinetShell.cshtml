@@ -34,17 +34,20 @@
 
     </div>
 
-    <div class="cabinet-main">
+    <div class="cabinet-scroll">
+    <div class="cabinet-container">
+
+        <div class="cabinet-account">
+            <div class="avatar avatar--lg">@account.Initial</div>
+            <div class="cabinet-account-info">
+                <div class="cabinet-account-name">@account.Name</div>
+                <div class="cabinet-account-note">Ваш аккаунт</div>
+            </div>
+        </div>
+
+        <div class="cabinet-main">
 
         <aside class="cabinet-side">
-
-            <div class="cabinet-account">
-                <div class="avatar avatar--lg">@account.Initial</div>
-                <div class="cabinet-account-info">
-                    <div class="cabinet-account-name">@account.Name</div>
-                    <div class="cabinet-account-note">Ваш аккаунт</div>
-                </div>
-            </div>
 
             <nav class="cabinet-nav">
 
@@ -85,10 +88,13 @@
 
         </aside>
 
-        <div class="cabinet-content">
+        <div class="cabinet-body">
             @RenderBody()
         </div>
 
+        </div>
+
+    </div>
     </div>
 
 </div>
