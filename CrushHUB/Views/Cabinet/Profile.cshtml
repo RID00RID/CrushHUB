@@ -7,19 +7,21 @@
 
 <div class="cabinet-page cabinet-page--narrow">
 
-    <div class="cabinet-page-title">Профиль</div>
+    <div class="cabinet-page-title cabinet-page-title--ruled">Профиль</div>
 
     <form method="post" asp-action="SaveProfile">
 
         <div class="field">
             <label class="field-label" asp-for="Name"></label>
             <input class="field-input" asp-for="Name" />
+            <div class="field-hint">Имя видно другим участникам — в списке пользователей и в шапке.</div>
             <span class="field-error" asp-validation-for="Name"></span>
         </div>
 
         <div class="field">
             <label class="field-label" asp-for="Email"></label>
             <input class="field-input" asp-for="Email" />
+            <div class="field-hint">По этому адресу можно входить наравне с логином.</div>
             <span class="field-error" asp-validation-for="Email"></span>
         </div>
 

@@ -152,6 +152,12 @@ body {
     box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
 }
 
+/* Пояснение под полем — как подписи в настройках GitHub. */
+.field-hint {
+    font-size: 12px;
+    color: var(--fg-muted);
+}
+
 .field-error {
     display: block;
     color: var(--danger);
