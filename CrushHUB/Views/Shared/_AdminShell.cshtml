@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "_Layout";
+
+    string activeTab = ViewData["AdminTab"] as string ?? string.Empty;
+    AccountCardViewModel account = ViewData["Account"] as AccountCardViewModel ?? new AccountCardViewModel();
+}
+
+@* Секции страницы проходят через этот слой к _Layout. *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", false)
+}
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", false)
+}
+
+<div class="admin">
+
+    <div class="admin-topbar">
+
+        <a class="admin-brand" asp-controller="Home" asp-action="Index">
+            <div class="admin-logo">A</div>
+            <div class="admin-brand-title">CrashHub &middot; Администрирование</div>
+        </a>
+
+        <div class="admin-topbar-spacer"></div>
+
+        <a class="link" asp-controller="Home" asp-action="Index">&larr; К проектам</a>
+
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <button type="submit" class="btn-link">Выйти</button>
+        </form>
+
+    </div>
+
+    <div class="admin-main">
+
+        <aside class="admin-side">
+
+            <div class="admin-account">
+                <div class="avatar avatar--lg">@account.Initial</div>
+                <div class="admin-account-info">
+                    <div class="admin-account-name">@account.Name</div>
+                    <div class="admin-account-note">Ваш аккаунт</div>
+                </div>
+            </div>
+
+            <nav class="admin-nav">
+                <a class="admin-nav-item @(activeTab == AdminController.ProfileTab ? "admin-nav-item--active" : null)"
+                   asp-controller="Admin" asp-action="Profile">Профиль</a>
+                <a class="admin-nav-item @(activeTab == AdminController.UsersTab ? "admin-nav-item--active" : null)"
+                   asp-controller="Admin" asp-action="Users">Пользователи</a>
+            </nav>
+
+        </aside>
+
+        <div class="admin-content">
+            @RenderBody()
+        </div>
+
+    </div>
+
+</div>

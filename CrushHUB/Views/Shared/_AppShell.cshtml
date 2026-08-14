@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "_Layout";
+    string? activeTab = ViewData["ActiveTab"] as string;
+    string? projectName = ViewData["ProjectName"] as string;
+    int? projectId = ViewData["ProjectId"] as int?;
+}
+
+@* Секции страницы проходят через этот слой к _Layout. *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/shell.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", false)
+}
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", false)
+}
+
+<div class="shell">
+
+    <div class="topbar">
+
+        <a class="topbar-brand" asp-controller="Home" asp-action="Index">
+            <div class="topbar-logo">C</div>
+            <div class="topbar-title">CrashHub</div>
+        </a>
+
+        @if (!string.IsNullOrEmpty(projectName))
+        {
+            <div class="topbar-divider"></div>
+            <div class="topbar-project">@projectName</div>
+        }
+
+        <nav class="tabs">
+            @foreach (AppTab tab in AppTab.All)
+            {
+                <a class="tab @(tab.Key == activeTab ? "tab--active" : null)"
+                   asp-controller="Home" asp-action="@tab.Action" asp-route-id="@projectId">
+                    <span class="tab-dot"></span>@tab.Label
+                </a>
+            }
+        </nav>
+
+    </div>
+
+    <div class="shell-content">
+        @RenderBody()
+    </div>
+
+</div>

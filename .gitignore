@@ -1,0 +1,25 @@
+# Сборка
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Пользовательские файлы IDE
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Загруженные пользователями файлы — данные, а не код
+CrushHUB/wwwroot/uploads/*
+!CrushHUB/wwwroot/uploads/.gitkeep
+
+# Локальные настройки
+appsettings.Local.json
+*.env
+
+# Локальные настройки Claude Code
+.claude/

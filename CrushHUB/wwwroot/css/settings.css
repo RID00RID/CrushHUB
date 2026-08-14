@@ -1,0 +1,96 @@
+/* CrashHub — вкладка «Настройки» проекта. */
+
+.settings {
+    padding: 28px 36px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.settings-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.settings-card {
+    margin-bottom: 16px;
+}
+
+.settings-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.settings-label {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
+}
+
+.settings-heading {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-bright);
+}
+
+.settings-row {
+    display: flex;
+    gap: 8px;
+}
+
+.settings-row .field-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.settings-value {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--fg-default);
+    background: var(--bg-canvas);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    word-break: break-all;
+}
+
+.settings-value--key {
+    color: var(--code-accent);
+}
+
+.settings-note {
+    color: var(--fg-muted);
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+/* ---------- Опасная зона ---------- */
+
+.danger-card {
+    border: 1px solid var(--danger);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.danger-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-bright);
+}
+
+.danger-note {
+    color: var(--fg-muted);
+    font-size: 12px;
+}
+

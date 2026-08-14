@@ -1,0 +1,45 @@
+﻿@model ChartViewModel
+
+<div class="card chart-card">
+
+    <div class="chart-title">@Model.Title</div>
+
+    <div class="chart-body">
+
+        <svg class="chart" width="100%" height="180" viewBox="0 0 640 180" preserveAspectRatio="none">
+            @foreach (ChartGridLine line in Model.Grid)
+            {
+                <line class="chart-grid" x1="0" y1="@line.YText" x2="640" y2="@line.YText"
+                      vector-effect="non-scaling-stroke"></line>
+            }
+            <polyline class="chart-line chart-line--@Model.Tone" points="@Model.Polyline"
+                      vector-effect="non-scaling-stroke"></polyline>
+            @foreach (ChartPoint point in Model.Points)
+            {
+                <circle class="chart-dot chart-dot--@Model.Tone" cx="@point.XText" cy="@point.YText" r="3"></circle>
+            }
+        </svg>
+
+        @* Подписи оси рисуем html-ом: svg растянут по ширине и текст в нём поехал бы. *@
+        <div class="chart-axis">
+            @foreach (ChartGridLine line in Model.Grid)
+            {
+                <span style="top: @(line.YText)px">@line.Value</span>
+            }
+        </div>
+
+        <div class="chart-labels">
+            @foreach (string label in Model.Labels)
+            {
+                <div>@label</div>
+            }
+        </div>
+
+    </div>
+
+    @if (Model.IsEmpty)
+    {
+        <div class="chart-empty">За последние 7 дней ничего не приходило</div>
+    }
+
+</div>

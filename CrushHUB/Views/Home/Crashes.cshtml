@@ -1,0 +1,74 @@
+﻿@model CrashesViewModel
+
+@{
+    Layout = "_AppShell";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/crashes.css" asp-append-version="true" />
+}
+
+<div class="page">
+
+    <div class="page-head">
+        <div>
+            <div class="page-title">Crash Report</div>
+            <div class="page-subtitle">Краши, полученные от Unreal Engine · @Model.ProjectName</div>
+        </div>
+
+        <form class="page-filters" method="get" asp-action="Crashes" asp-route-id="@Model.ProjectId">
+            <select class="filter-select" name="status" data-auto-submit>
+                <option value="" selected="@(Model.Status is null)">Все</option>
+                @foreach (CrashStatus status in CrashStatusView.All)
+                {
+                    <option value="@status" selected="@(Model.Status == status)">@CrashStatusView.Display(status)</option>
+                }
+            </select>
+            <select class="filter-select" name="sort" data-auto-submit>
+                @foreach (CrashSort sort in CrashSortView.All)
+                {
+                    <option value="@sort" selected="@(Model.Sort == sort)">@CrashSortView.Display(sort)</option>
+                }
+            </select>
+        </form>
+    </div>
+
+    <div class="table">
+
+        <div class="crash-head table-head">
+            <div>Ошибка</div>
+            <div>Статус</div>
+            <div>Версия</div>
+            <div>Платформа</div>
+            <div>System ID</div>
+            <div>Дата</div>
+        </div>
+
+        @if (Model.Crashes.Count == 0)
+        {
+            <div class="table-empty">Крашей пока нет — они появятся, когда игра начнёт их присылать.</div>
+        }
+        else
+        {
+            @foreach (CrashListItemViewModel crash in Model.Crashes)
+            {
+                <a class="crash-row table-row" asp-action="Crashes" asp-route-id="@Model.ProjectId" asp-route-crash="@crash.Id">
+                    <div class="cell-link">@crash.Title</div>
+                    <div>
+                        <span class="badge badge--@CrashStatusView.Tone(crash.Status)">@CrashStatusView.Display(crash.Status)</span>
+                    </div>
+                    <div class="cell-muted">@crash.Version</div>
+                    <div class="cell-muted">@crash.Platform</div>
+                    <div class="cell-muted cell-mono">@crash.SystemId</div>
+                    <div class="cell-muted">@crash.OccurredAt.ToString("dd.MM.yyyy")</div>
+                </a>
+            }
+        }
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/auto-submit.js" asp-append-version="true"></script>
+}

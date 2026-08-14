@@ -1,0 +1,69 @@
+﻿@model ProjectSettingsViewModel
+
+@{
+    Layout = "_AppShell";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/settings.css" asp-append-version="true" />
+}
+
+<div class="settings">
+
+    <div class="settings-title">Настройки проекта</div>
+
+    <div class="card settings-card">
+        <div class="settings-label">Название проекта</div>
+        <form class="settings-row" method="post" asp-action="RenameProject" asp-route-id="@Model.Id">
+            <input class="field-input" asp-for="Name" />
+            <button type="submit" class="btn-secondary">Сохранить</button>
+        </form>
+        <span class="field-error" asp-validation-for="Name"></span>
+    </div>
+
+    <div class="card settings-card">
+        <div class="settings-heading">URL сервера</div>
+        <div class="settings-row">
+            <div class="settings-value" id="server-url">@Model.ServerUrl</div>
+            <button type="button" class="btn-secondary" data-copy="server-url">Копировать</button>
+        </div>
+        <div class="settings-note">
+            Укажите этот адрес в настройках плагина, чтобы он знал, куда отправлять краши и обращения.
+        </div>
+    </div>
+
+    <div class="card settings-card">
+        <div class="settings-card-header">
+            <div class="settings-heading">Ключ приложения</div>
+            <form method="post" asp-action="RegenerateKey" asp-route-id="@Model.Id">
+                <button type="submit" class="btn-secondary">Перевыпустить</button>
+            </form>
+        </div>
+        <div class="settings-row">
+            <div class="settings-value settings-value--key" id="api-key">@Model.ApiKey</div>
+            <button type="button" class="btn-secondary" data-copy="api-key">Копировать</button>
+        </div>
+        <div class="settings-note">
+            Используйте этот ключ в SDK для отправки крашей и обращений пользователей.
+        </div>
+    </div>
+
+    @if (User.IsInRole(RoleNames.Admin))
+    {
+        <div class="danger-card">
+            <div>
+                <div class="danger-title">Удалить проект</div>
+                <div class="danger-note">Это действие необратимо.</div>
+            </div>
+            <form method="post" asp-action="DeleteProject" asp-route-id="@Model.Id"
+                  onsubmit="return confirm('Удалить проект? Действие необратимо.');">
+                <button type="submit" class="btn-danger">Удалить</button>
+            </form>
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+    <script src="~/js/copy.js" asp-append-version="true"></script>
+}

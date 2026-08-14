@@ -1,0 +1,75 @@
+﻿@model CrashDetailViewModel
+
+@{
+    Layout = "_AppShell";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/crashes.css" asp-append-version="true" />
+}
+
+<div class="detail">
+
+    <a class="link detail-back" asp-action="Crashes" asp-route-id="@Model.ProjectId">&larr; Все краши</a>
+
+    <div class="detail-head">
+        <div class="detail-title">@Model.Title</div>
+        <span class="badge badge--@CrashStatusView.Tone(Model.Status)">@CrashStatusView.Display(Model.Status)</span>
+    </div>
+
+    <div class="detail-facts">
+        <div class="fact">
+            <div class="fact-label">Версия</div>
+            <div class="fact-value">@Model.Version</div>
+        </div>
+        <div class="fact">
+            <div class="fact-label">Платформа</div>
+            <div class="fact-value">@Model.Platform</div>
+        </div>
+        <div class="fact">
+            <div class="fact-label">System ID</div>
+            <div class="fact-value fact-value--mono">
+                @if (Model.GameUserId is not null)
+                {
+                    <a class="link" asp-action="Users" asp-route-id="@Model.ProjectId" asp-route-user="@Model.GameUserId">@Model.SystemId</a>
+                }
+                else
+                {
+                    <span class="fact-muted">не прислан</span>
+                }
+            </div>
+        </div>
+        <div class="fact">
+            <div class="fact-label">Дата</div>
+            <div class="fact-value">@Model.OccurredAt.ToString("dd.MM.yyyy")</div>
+        </div>
+    </div>
+
+    <div class="detail-section-title">Callstack</div>
+    <pre class="code-block">@Model.Callstack</pre>
+
+    <div class="detail-section-title">Статус</div>
+    <div class="detail-actions">
+        @foreach (CrashStatus status in CrashStatusView.All)
+        {
+            <form method="post" asp-action="SetCrashStatus" asp-route-id="@Model.ProjectId">
+                <input type="hidden" name="crashId" value="@Model.Id" />
+                <input type="hidden" name="status" value="@status" />
+                <button type="submit"
+                        class="status-button status-button--@CrashStatusView.Tone(status) @(Model.Status == status ? "status-button--active" : null)">
+                    @CrashStatusView.Display(status)
+                </button>
+            </form>
+        }
+
+        @if (User.IsInRole(RoleNames.Admin))
+        {
+            <form class="detail-delete" method="post" asp-action="DeleteCrash" asp-route-id="@Model.ProjectId"
+                  onsubmit="return confirm('Удалить краш? Действие необратимо.');">
+                <input type="hidden" name="crashId" value="@Model.Id" />
+                <button type="submit" class="btn-danger">Удалить</button>
+            </form>
+        }
+    </div>
+
+</div>

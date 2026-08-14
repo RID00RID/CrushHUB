@@ -1,0 +1,47 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Вход";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+}
+
+<div class="auth-screen">
+    <div class="auth-box">
+
+        <div class="auth-brand">
+            <div class="auth-logo">C</div>
+            <div class="auth-title">Вход в CrashHub</div>
+        </div>
+
+        <form class="auth-card" method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl">
+
+            <div class="field">
+                <label class="field-label" asp-for="Username"></label>
+                <input class="field-input" asp-for="Username" placeholder="admin" autocomplete="username" autofocus />
+                <span class="field-error" asp-validation-for="Username"></span>
+            </div>
+
+            <div class="field field--tight">
+                <label class="field-label" asp-for="Password"></label>
+                <input class="field-input" asp-for="Password" type="password" placeholder="••••••••" autocomplete="current-password" />
+                <span class="field-error" asp-validation-for="Password"></span>
+            </div>
+
+            <label class="auth-remember">
+                <input asp-for="RememberMe" />
+                <span>Запомнить меня</span>
+            </label>
+
+            <div class="auth-error" asp-validation-summary="ModelOnly"></div>
+
+            <button type="submit" class="btn btn-primary btn-block auth-submit">Войти</button>
+
+        </form>
+
+        <div class="auth-footnote">Self-hosted · доступ только для администраторов проекта</div>
+
+    </div>
+</div>

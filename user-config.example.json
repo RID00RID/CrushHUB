@@ -1,0 +1,12 @@
+{
+    "UserConfig":  {
+                       "SystemID":  "03FF0210-04E0-0599-2406-E70700080009",
+                       "os":  {
+                                  "name":  "Майкрософт Windows 11 Pro",
+                                  "version":  "10.0.26200"
+                              },
+                       "CPU":  "AMD Ryzen 9 7900X 12-Core Processor",
+                       "GPU":  "NVIDIA GeForce RTX 3080 Ti",
+                       "Memory":  "64629"
+                   }
+}

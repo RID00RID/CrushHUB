@@ -1,0 +1,48 @@
+﻿@model UserConfigViewModel
+
+<div class="detail-section-title">Конфигурация игрока</div>
+
+@if (Model.HasAnything)
+{
+    <div class="detail-facts detail-facts--auto">
+
+        @if (Model.Os is not null)
+        {
+            <div class="fact">
+                <div class="fact-label">ОС</div>
+                <div class="fact-value">@Model.Os.Name</div>
+                <div class="fact-note">@Model.Os.Version</div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Cpu))
+        {
+            <div class="fact">
+                <div class="fact-label">Процессор</div>
+                <div class="fact-value">@Model.Cpu</div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Gpu))
+        {
+            <div class="fact">
+                <div class="fact-label">Видеокарта</div>
+                <div class="fact-value">@Model.Gpu</div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.MemoryDisplay))
+        {
+            <div class="fact">
+                <div class="fact-label">Память</div>
+                <div class="fact-value">@Model.MemoryDisplay</div>
+            </div>
+        }
+
+    </div>
+}
+
+<details class="raw-json">
+    <summary>Сырой JSON конфигурации</summary>
+    <pre class="code-block">@Model.Raw</pre>
+</details>

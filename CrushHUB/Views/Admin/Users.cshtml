@@ -1,0 +1,128 @@
+﻿@model UsersViewModel
+
+@{
+    Layout = "_AdminShell";
+    ViewData["Title"] = "Пользователи";
+}
+
+<div class="admin-page">
+
+    <div class="admin-page-title">Пользователи</div>
+    <div class="admin-page-subtitle">Управление ролями участников системы CrashHub</div>
+
+    <div class="admin-page-actions">
+        @if (Model.IsCreating)
+        {
+            <a class="btn-violet" asp-action="Users">Скрыть</a>
+        }
+        else
+        {
+            <a class="btn-violet" asp-action="Users" asp-route-create="true">Создать</a>
+        }
+    </div>
+
+    @if (Model.Error is not null)
+    {
+        <div class="admin-error">@Model.Error</div>
+    }
+
+    @if (Model.IsCreating)
+    {
+        <div class="card create-user">
+
+            <div class="card-title">Новый пользователь</div>
+
+            <form method="post" asp-action="CreateUser">
+
+                <div class="create-user-grid">
+
+                    <div class="field">
+                        <label class="field-label" asp-for="Create.Name"></label>
+                        <input class="field-input" asp-for="Create.Name" placeholder="Мария Волкова" />
+                        <span class="field-error" asp-validation-for="Create.Name"></span>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" asp-for="Create.Email"></label>
+                        <input class="field-input" asp-for="Create.Email" placeholder="maria@studio.dev" />
+                        <span class="field-error" asp-validation-for="Create.Email"></span>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" asp-for="Create.Password"></label>
+                        <input class="field-input" asp-for="Create.Password" type="password" placeholder="••••••••" />
+                        <span class="field-error" asp-validation-for="Create.Password"></span>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" asp-for="Create.Role"></label>
+                        <select class="field-input" asp-for="Create.Role">
+                            @foreach (string role in RoleNames.All)
+                            {
+                                <option value="@role">@RoleNames.Display(role)</option>
+                            }
+                        </select>
+                        <span class="field-error" asp-validation-for="Create.Role"></span>
+                    </div>
+
+                </div>
+
+                <div class="create-user-buttons">
+                    <button type="submit" class="btn btn-primary">Создать пользователя</button>
+                    <a class="btn-secondary btn-cancel" asp-action="Users">Отмена</a>
+                </div>
+
+            </form>
+
+        </div>
+    }
+
+    <div class="members">
+
+        <div class="members-head">
+            <div>Имя</div>
+            <div>Email</div>
+            <div>Роль</div>
+            <div></div>
+        </div>
+
+        @foreach (MemberViewModel member in Model.Members)
+        {
+            <div class="member-row">
+
+                <div class="member-name">@member.Name</div>
+                <div class="member-email">@member.Email</div>
+
+                <div>
+                    <form method="post" asp-action="ChangeRole">
+                        <input type="hidden" name="userId" value="@member.Id" />
+                        <select class="role-select" name="role" disabled="@member.IsCurrentUser">
+                            @foreach (string role in RoleNames.All)
+                            {
+                                <option value="@role" selected="@(role == member.Role)">@RoleNames.Display(role)</option>
+                            }
+                        </select>
+                    </form>
+                </div>
+
+                <div class="member-actions">
+                    @if (!member.IsCurrentUser)
+                    {
+                        <form method="post" asp-action="DeleteUser"
+                              onsubmit="return confirm('Удалить пользователя? Действие необратимо.');">
+                            <input type="hidden" name="userId" value="@member.Id" />
+                            <button type="submit" class="btn-remove">Удалить</button>
+                        </form>
+                    }
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/role-select.js" asp-append-version="true"></script>
+}

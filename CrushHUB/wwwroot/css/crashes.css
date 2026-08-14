@@ -1,0 +1,8 @@
+/* CrashHub — вкладка «Crash Report». Общие таблицы, бейджи и карточка живут в shell.css. */
+
+.crash-head,
+.crash-row {
+    display: grid;
+    grid-template-columns: 2fr 0.8fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+}

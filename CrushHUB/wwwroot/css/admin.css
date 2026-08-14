@@ -1,0 +1,294 @@
+/* CrashHub — раздел администрирования: каркас с сайдбаром, профиль и пользователи. */
+
+.admin {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Верхняя панель ---------- */
+
+.admin-topbar {
+    flex-shrink: 0;
+    height: 56px;
+    background: var(--bg-inset);
+    border-bottom: 1px solid var(--border-muted);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 32px;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.admin-logo {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-sm);
+    background: var(--violet);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    color: #fff;
+}
+
+.admin-brand-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-bright);
+}
+
+.admin-topbar-spacer {
+    flex: 1;
+}
+
+/* ---------- Сайдбар ---------- */
+
+.admin-main {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
+
+.admin-side {
+    width: 260px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border-muted);
+    padding: 24px 16px;
+    overflow-y: auto;
+}
+
+.admin-account {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 20px 8px;
+}
+
+.admin-account-info {
+    min-width: 0;
+}
+
+.admin-account-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-account-note {
+    font-size: 12px;
+    color: var(--fg-muted);
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.admin-nav-item {
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg-muted);
+    text-decoration: none;
+}
+
+.admin-nav-item:hover {
+    color: var(--fg-bright);
+}
+
+.admin-nav-item--active {
+    color: var(--fg-bright);
+    background: var(--bg-surface);
+}
+
+/* ---------- Контент ---------- */
+
+.admin-content {
+    flex: 1;
+    min-width: 0;
+    overflow: auto;
+}
+
+.admin-page {
+    max-width: 900px;
+    padding: 32px;
+}
+
+.admin-page--narrow {
+    max-width: 560px;
+}
+
+.admin-page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    margin-bottom: 4px;
+}
+
+.admin-page-subtitle {
+    color: var(--fg-muted);
+    margin-bottom: 24px;
+}
+
+.admin-page-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.admin-error {
+    color: var(--danger);
+    font-size: 12px;
+    margin-bottom: 16px;
+}
+
+.btn-violet {
+    background: var(--violet);
+    border: 1px solid var(--accent-border);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-violet:hover {
+    filter: brightness(1.15);
+}
+
+/* ---------- Профиль ---------- */
+
+.btn-save {
+    padding: 8px 16px;
+}
+
+.saved-hint {
+    margin-left: 12px;
+    font-size: 12px;
+    color: var(--success);
+}
+
+/* ---------- Новый пользователь ---------- */
+
+.create-user {
+    margin-bottom: 20px;
+}
+
+.create-user-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.create-user-grid .field {
+    margin-bottom: 0;
+}
+
+.create-user-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.btn-cancel {
+    padding: 8px 16px;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* ---------- Таблица пользователей ---------- */
+
+.members {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.members-head,
+.member-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1.6fr 1fr 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 16px;
+}
+
+.members-head {
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--fg-muted);
+    font-weight: 600;
+}
+
+.member-row {
+    border-bottom: 1px solid var(--border-muted);
+    font-size: 13px;
+}
+
+.member-row:last-child {
+    border-bottom: none;
+}
+
+.member-name {
+    font-weight: 500;
+    color: var(--fg-bright);
+}
+
+.member-email {
+    color: var(--fg-muted);
+}
+
+.member-actions {
+    text-align: right;
+}
+
+.role-select {
+    background: var(--bg-canvas);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--fg-default);
+    padding: 5px 8px;
+    font-size: 12px;
+    font-family: inherit;
+    outline: none;
+}
+
+.role-select:disabled {
+    color: var(--fg-muted);
+    cursor: not-allowed;
+}
+
+.btn-remove {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--danger);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.btn-remove:hover {
+    background: rgba(248, 81, 73, 0.1);
+}

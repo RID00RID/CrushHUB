@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Нет доступа";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+}
+
+<div class="auth-screen">
+    <div class="auth-box">
+
+        <div class="auth-brand">
+            <div class="auth-logo">C</div>
+            <div class="auth-title">Недостаточно прав</div>
+        </div>
+
+        <div class="auth-card">
+            <div class="auth-footnote" style="margin-top:0;">
+                Этот раздел доступен только администраторам CrashHub.
+            </div>
+        </div>
+
+        <div class="auth-footnote">
+            <a class="link" asp-controller="Home" asp-action="Index">К проектам</a>
+        </div>
+
+    </div>
+</div>

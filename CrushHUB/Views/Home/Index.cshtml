@@ -1,0 +1,97 @@
+﻿@model ProjectsViewModel
+
+@{
+    ViewData["Title"] = "Проекты";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/projects.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/js/account-menu.js" asp-append-version="true"></script>
+}
+
+<div class="projects-header">
+
+    <div class="projects-brand">
+        <div class="projects-logo">C</div>
+        <div class="projects-brand-title">CrashHub</div>
+    </div>
+
+    <div class="projects-actions">
+        @if (User.IsInRole(RoleNames.Admin))
+        {
+            if (Model.IsCreating)
+            {
+                <a class="btn btn-primary" asp-action="Index">Скрыть</a>
+            }
+            else
+            {
+                <a class="btn btn-primary" asp-action="Index" asp-route-create="true">Новый проект</a>
+            }
+        }
+        @await Component.InvokeAsync("AccountMenu")
+    </div>
+
+</div>
+
+<div class="projects-body">
+
+    <div class="projects-title">Проекты</div>
+    <div class="projects-subtitle">Выберите проект или создайте новый, чтобы получить ключ API</div>
+
+    @if (Model.IsCreating)
+    {
+        <div class="card create-card">
+
+            <div class="card-title">Создание проекта</div>
+
+            <form class="create-row" method="post" asp-action="CreateProject">
+                <div class="field">
+                    <label class="field-label" asp-for="Create.Name"></label>
+                    <input class="field-input" asp-for="Create.Name" placeholder="Например, Skyward Rift" autofocus />
+                </div>
+                <button type="submit" class="btn btn-primary create-submit">Создать и получить ключ</button>
+            </form>
+
+            <span class="field-error" asp-validation-for="Create.Name"></span>
+
+            @if (Model.GeneratedKey is not null)
+            {
+                <div class="key-box">
+                    <div class="key-caption">Ключ приложения (сохраните — он больше не будет показан полностью)</div>
+                    <div class="key-value">@Model.GeneratedKey</div>
+                </div>
+            }
+
+        </div>
+    }
+
+    <div class="section-label">Ваши проекты</div>
+
+    @if (Model.Projects.Count == 0)
+    {
+        <div class="projects-empty">Проектов пока нет — создайте первый, чтобы получить ключ приложения.</div>
+    }
+    else
+    {
+        <div class="project-list">
+            @foreach (ProjectCardViewModel project in Model.Projects)
+            {
+                <a class="project-card" asp-action="Dashboard" asp-route-id="@project.Id">
+                    <div class="project-icon"><span></span></div>
+                    <div class="project-info">
+                        <div class="project-name">@project.Name</div>
+                        <div class="project-platform">@project.Platform</div>
+                    </div>
+                    <div class="project-stats">
+                        <div><span class="stat-crashes">@project.CrashCount</span> крашей</div>
+                        <div><span class="stat-reports">@project.OpenReportCount</span> обращений</div>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+
+</div>

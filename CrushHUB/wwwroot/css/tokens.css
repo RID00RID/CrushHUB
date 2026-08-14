@@ -1,0 +1,347 @@
+/* CrashHub — базовые токены дизайна. Подключаются в _Layout, используются всеми страницами. */
+
+:root {
+    /* Поверхности */
+    --bg-canvas: #0d1117;
+    --bg-inset: #010409;
+    --bg-surface: #161b22;
+    --bg-raised: #21262d;
+
+    /* Границы */
+    --border: #30363d;
+    --border-muted: #21262d;
+
+    /* Текст */
+    --fg-default: #c9d1d9;
+    --fg-bright: #e6edf3;
+    --fg-muted: #8b949e;
+
+    /* Акценты */
+    --accent: #238636;
+    --accent-hover: #2ea043;
+    --accent-border: rgba(240, 246, 252, 0.1);
+    --link: #58a6ff;
+    --violet: #6e40c9;
+
+    /* Статусы */
+    --danger: #f85149;
+    --warning: #d29922;
+    --success: #3fb950;
+    --code-accent: #7ee787;
+
+    /* Формы */
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+    --radius-pill: 12px;
+
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--bg-canvas);
+    color: var(--fg-default);
+    font-family: var(--font-sans);
+    font-size: 14px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.link {
+    color: var(--link);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Аватар ---------- */
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--violet);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.avatar--lg {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+}
+
+/* ---------- Карточка ---------- */
+
+.card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    margin-bottom: 12px;
+}
+
+/* ---------- Поля ввода ---------- */
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.field--tight {
+    margin-bottom: 8px;
+}
+
+.field-label {
+    font-size: 12px;
+    color: var(--fg-muted);
+}
+
+.field-input {
+    background: var(--bg-canvas);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--fg-default);
+    padding: 8px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+}
+
+.field-input::placeholder {
+    color: var(--fg-muted);
+}
+
+.field-input:focus {
+    border-color: var(--link);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+}
+
+.field-error {
+    display: block;
+    color: var(--danger);
+    font-size: 12px;
+}
+
+.field-error:empty {
+    display: none;
+}
+
+/* ASP.NET вешает этот класс на сводку ошибок, когда ошибок нет. */
+.validation-summary-valid {
+    display: none;
+}
+
+.field-textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* ---------- Кнопки ---------- */
+
+.btn {
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 6px 14px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    border: 1px solid var(--accent-border);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+}
+
+.btn-block {
+    width: 100%;
+    padding: 9px 14px;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--fg-default);
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.btn-secondary:hover {
+    background: var(--bg-raised);
+}
+
+.btn-danger {
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.btn-danger:hover {
+    background: rgba(248, 81, 73, 0.1);
+}
+
+/* ---------- Кнопка-ссылка ---------- */
+
+.btn-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--fg-muted);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    color: var(--fg-bright);
+}
+
+/* ---------- Меню аккаунта (view component AccountMenu) ---------- */
+
+.account-menu {
+    position: relative;
+}
+
+.account-menu-trigger {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.account-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+}
+
+.account-menu-popup {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 220px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 11;
+    overflow: hidden;
+}
+
+.account-menu:not(.account-menu--open) .account-menu-popup,
+.account-menu:not(.account-menu--open) .account-menu-overlay {
+    display: none;
+}
+
+.account-menu-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-muted);
+}
+
+.account-menu-info {
+    min-width: 0;
+}
+
+.account-menu-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.account-menu-email {
+    font-size: 12px;
+    color: var(--fg-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.account-menu-group {
+    padding: 6px;
+}
+
+.account-menu-divider {
+    height: 1px;
+    background: var(--border-muted);
+}
+
+.account-menu-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--fg-default);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.account-menu-item:hover {
+    background: var(--bg-raised);
+}
+
+.account-menu-item--danger {
+    color: var(--danger);
+}

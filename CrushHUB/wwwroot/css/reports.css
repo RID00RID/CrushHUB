@@ -1,0 +1,45 @@
+/* CrashHub — вкладка «User Report». Общие таблицы, бейджи и карточка живут в shell.css. */
+
+.report-head,
+.report-row {
+    display: grid;
+    grid-template-columns: 1.2fr 2.4fr 1fr 1fr;
+    align-items: center;
+}
+
+.report-description {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--fg-default);
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+}
+
+.attachment {
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.attachment-empty {
+    background: repeating-linear-gradient(135deg,
+        var(--bg-surface), var(--bg-surface) 10px,
+        var(--bg-canvas) 10px, var(--bg-canvas) 20px);
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.attachment-image {
+    display: block;
+    max-width: 100%;
+}

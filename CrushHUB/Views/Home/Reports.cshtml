@@ -1,0 +1,87 @@
+﻿@model ReportsViewModel
+
+@{
+    Layout = "_AppShell";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/reports.css" asp-append-version="true" />
+}
+
+<div class="page">
+
+    <div class="page-head">
+        <div>
+            <div class="page-title">User Report</div>
+            <div class="page-subtitle">Обращения, отправленные игроками через форму · @Model.ProjectName</div>
+        </div>
+
+        <div class="page-filters">
+
+            <form class="page-filters" method="get" asp-action="Reports" asp-route-id="@Model.ProjectId">
+                <input type="hidden" name="sort" value="@Model.Sort" />
+                <select class="filter-select" name="category" data-auto-submit>
+                    <option value="" selected="@(Model.Category is null)">Все категории</option>
+                    @foreach (string category in Model.Categories)
+                    {
+                        <option value="@category" selected="@(Model.Category == category)">@category</option>
+                    }
+                </select>
+                <select class="filter-select" name="status" data-auto-submit>
+                    <option value="" selected="@(Model.Status is null)">Все</option>
+                    @foreach (ReportStatus status in ReportStatusView.All)
+                    {
+                        <option value="@status" selected="@(Model.Status == status)">@ReportStatusView.Display(status)</option>
+                    }
+                </select>
+            </form>
+
+            <div class="segmented">
+                @foreach (ReportSort sort in ReportSortView.All)
+                {
+                    <a class="segmented-item @(Model.Sort == sort ? "segmented-item--active" : null)"
+                       asp-action="Reports" asp-route-id="@Model.ProjectId"
+                       asp-route-category="@Model.Category" asp-route-status="@Model.Status" asp-route-sort="@sort">
+                        @ReportSortView.Display(sort)
+                    </a>
+                }
+            </div>
+
+        </div>
+    </div>
+
+    <div class="table">
+
+        <div class="report-head table-head">
+            <div>Категория</div>
+            <div>Описание</div>
+            <div>Дата</div>
+            <div>Статус</div>
+        </div>
+
+        @if (Model.Reports.Count == 0)
+        {
+            <div class="table-empty">Обращений пока нет — они появятся, когда игроки начнут их отправлять.</div>
+        }
+        else
+        {
+            @foreach (ReportListItemViewModel report in Model.Reports)
+            {
+                <a class="report-row table-row" asp-action="Reports" asp-route-id="@Model.ProjectId" asp-route-report="@report.Id">
+                    <div class="cell-link">@report.Category</div>
+                    <div class="cell-muted">@report.Description</div>
+                    <div class="cell-muted">@report.CreatedAt.ToString("dd.MM.yyyy")</div>
+                    <div>
+                        <span class="badge badge--@ReportStatusView.Tone(report.Status)">@ReportStatusView.Display(report.Status)</span>
+                    </div>
+                </a>
+            }
+        }
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/js/auto-submit.js" asp-append-version="true"></script>
+}

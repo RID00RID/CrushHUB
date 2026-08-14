@@ -1,0 +1,53 @@
+/* CrashHub — вкладка «Пользователи»: машины игроков и их конфигурации. */
+
+.user-head,
+.user-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items: center;
+}
+
+.user-search {
+    width: 220px;
+    padding: 7px 12px;
+    font-size: 12px;
+}
+
+.count-crashes {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.count-reports {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.user-title {
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    font-family: var(--font-mono);
+    word-break: break-all;
+}
+
+/* ---------- Краши и обращения пользователя ---------- */
+
+.user-events {
+    margin-bottom: 24px;
+}
+
+.event-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.event-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--fg-muted);
+}

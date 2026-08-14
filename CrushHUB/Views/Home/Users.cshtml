@@ -1,0 +1,50 @@
+﻿@model GameUsersViewModel
+
+@{
+    Layout = "_AppShell";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/users.css" asp-append-version="true" />
+}
+
+<div class="page">
+
+    <div class="page-head">
+        <div>
+            <div class="page-title">Пользователи</div>
+            <div class="page-subtitle">Машины, с которых приходят краши и обращения · @Model.ProjectName</div>
+        </div>
+
+        <form class="page-filters" method="get" asp-action="Users" asp-route-id="@Model.ProjectId">
+            <input class="field-input user-search" name="search" value="@Model.Search" placeholder="Поиск по System ID" />
+        </form>
+    </div>
+
+    <div class="table">
+
+        <div class="user-head table-head">
+            <div>System ID</div>
+            <div>Краши</div>
+            <div>Обращения</div>
+        </div>
+
+        @if (Model.Users.Count == 0)
+        {
+            <div class="table-empty">Пользователей пока нет — они появятся вместе с первыми крашами и обращениями.</div>
+        }
+        else
+        {
+            @foreach (GameUserListItemViewModel user in Model.Users)
+            {
+                <a class="user-row table-row" asp-action="Users" asp-route-id="@Model.ProjectId" asp-route-user="@user.Id">
+                    <div class="cell-link cell-mono">@user.SystemId</div>
+                    <div class="count-crashes">@user.CrashCount</div>
+                    <div class="count-reports">@user.ReportCount</div>
+                </a>
+            }
+        }
+
+    </div>
+
+</div>

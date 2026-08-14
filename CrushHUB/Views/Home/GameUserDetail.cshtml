@@ -1,0 +1,72 @@
+﻿@model GameUserDetailViewModel
+
+@{
+    Layout = "_AppShell";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/users.css" asp-append-version="true" />
+}
+
+<div class="detail detail--narrow">
+
+    <a class="link detail-back" asp-action="Users" asp-route-id="@Model.ProjectId">&larr; Все пользователи</a>
+
+    <div class="user-title">@Model.SystemId</div>
+    <div class="detail-date">
+        первый раз @Model.FirstSeenAt.ToString("dd.MM.yyyy") · последний @Model.LastSeenAt.ToString("dd.MM.yyyy")
+    </div>
+
+    @if (Model.Config is not null)
+    {
+        <partial name="_UserConfig" model="Model.Config" />
+    }
+    else
+    {
+        <div class="detail-section-title">Конфигурация игрока</div>
+        <div class="table-empty">Конфигурация не приходила — игра не прислала userConfig.</div>
+    }
+
+    <div class="detail-section-title">Краши</div>
+    <div class="table user-events">
+        @if (Model.Crashes.Count == 0)
+        {
+            <div class="table-empty">Крашей нет</div>
+        }
+        else
+        {
+            @foreach (CrashListItemViewModel crash in Model.Crashes)
+            {
+                <a class="event-row table-row" asp-action="Crashes" asp-route-id="@Model.ProjectId" asp-route-crash="@crash.Id">
+                    <div class="cell-link">@crash.Title</div>
+                    <div class="event-meta">
+                        <span class="badge badge--@CrashStatusView.Tone(crash.Status)">@CrashStatusView.Display(crash.Status)</span>
+                        <span>@crash.OccurredAt.ToString("dd.MM.yyyy")</span>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+
+    <div class="detail-section-title">Обращения</div>
+    <div class="table">
+        @if (Model.Reports.Count == 0)
+        {
+            <div class="table-empty">Обращений нет</div>
+        }
+        else
+        {
+            @foreach (ReportListItemViewModel report in Model.Reports)
+            {
+                <a class="event-row table-row" asp-action="Reports" asp-route-id="@Model.ProjectId" asp-route-report="@report.Id">
+                    <div class="cell-link">@report.Category</div>
+                    <div class="event-meta">
+                        <span class="badge badge--@ReportStatusView.Tone(report.Status)">@ReportStatusView.Display(report.Status)</span>
+                        <span>@report.CreatedAt.ToString("dd.MM.yyyy")</span>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+
+</div>

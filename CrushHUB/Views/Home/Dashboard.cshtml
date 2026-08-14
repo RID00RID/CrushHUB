@@ -1,0 +1,32 @@
+﻿@model DashboardViewModel
+
+@{
+    Layout = "_AppShell";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+}
+
+<div class="page">
+
+    <div class="page-title">Dashboard</div>
+    <div class="page-subtitle dashboard-subtitle">@Model.ProjectName</div>
+
+    <div class="stats">
+        <a class="stat" asp-action="Crashes" asp-route-id="@Model.ProjectId">
+            <div class="stat-label">Всего крашей</div>
+            <div class="stat-value stat-value--danger">@Model.CrashCount</div>
+        </a>
+        <a class="stat" asp-action="Reports" asp-route-id="@Model.ProjectId" asp-route-status="@ReportStatus.Open">
+            <div class="stat-label">Открытых обращений</div>
+            <div class="stat-value stat-value--warning">@Model.OpenReportCount</div>
+        </a>
+    </div>
+
+    <div class="charts">
+        <partial name="_Chart" model="Model.Crashes" />
+        <partial name="_Chart" model="Model.Reports" />
+    </div>
+
+</div>

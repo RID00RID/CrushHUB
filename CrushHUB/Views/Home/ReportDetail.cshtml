@@ -1,0 +1,70 @@
+﻿@model ReportDetailViewModel
+
+@{
+    Layout = "_AppShell";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/reports.css" asp-append-version="true" />
+}
+
+<div class="detail detail--narrow">
+
+    <a class="link detail-back" asp-action="Reports" asp-route-id="@Model.ProjectId">&larr; Все обращения</a>
+
+    <div class="detail-head">
+        <div class="detail-title">@Model.Category</div>
+        <span class="badge badge--@ReportStatusView.Tone(Model.Status)">@ReportStatusView.Display(Model.Status)</span>
+    </div>
+
+    <div class="detail-date">
+        @Model.CreatedAt.ToString("dd.MM.yyyy")
+        @if (Model.GameUserId is not null)
+        {
+            <span>·</span>
+            <a class="link" asp-action="Users" asp-route-id="@Model.ProjectId" asp-route-user="@Model.GameUserId">@Model.SystemId</a>
+        }
+    </div>
+
+    <div class="detail-section-title">Описание проблемы</div>
+    <div class="report-description">@Model.Description</div>
+
+    <div class="detail-section-title">Вложение</div>
+    <div class="attachment">
+        @if (string.IsNullOrEmpty(Model.ScreenshotPath))
+        {
+            <div class="attachment-empty">скриншот не приложен</div>
+        }
+        else
+        {
+            <a href="@Model.ScreenshotPath" target="_blank" rel="noopener">
+                <img class="attachment-image" src="@Model.ScreenshotPath" alt="Скриншот от пользователя" />
+            </a>
+        }
+    </div>
+
+    <div class="detail-section-title">Статус</div>
+    <div class="detail-actions">
+        @foreach (ReportStatus status in ReportStatusView.All)
+        {
+            <form method="post" asp-action="SetReportStatus" asp-route-id="@Model.ProjectId">
+                <input type="hidden" name="reportId" value="@Model.Id" />
+                <input type="hidden" name="status" value="@status" />
+                <button type="submit"
+                        class="status-button status-button--@ReportStatusView.Tone(status) @(Model.Status == status ? "status-button--active" : null)">
+                    @ReportStatusView.Display(status)
+                </button>
+            </form>
+        }
+
+        @if (User.IsInRole(RoleNames.Admin))
+        {
+            <form class="detail-delete" method="post" asp-action="DeleteReport" asp-route-id="@Model.ProjectId"
+                  onsubmit="return confirm('Удалить обращение? Действие необратимо.');">
+                <input type="hidden" name="reportId" value="@Model.Id" />
+                <button type="submit" class="btn-danger">Удалить</button>
+            </form>
+        }
+    </div>
+
+</div>

@@ -1,0 +1,131 @@
+/* CrashHub — вкладка «Dashboard»: сводка и графики за неделю. */
+
+.dashboard-subtitle {
+    margin-bottom: 24px;
+}
+
+/* ---------- Плитки со сводкой ---------- */
+
+.stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+    padding: 16px 20px;
+    min-width: 180px;
+    text-decoration: none;
+}
+
+.stat:hover {
+    border-color: var(--link);
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.stat-value--danger {
+    color: var(--danger);
+}
+
+.stat-value--warning {
+    color: var(--warning);
+}
+
+/* ---------- Графики ---------- */
+
+.charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 16px;
+}
+
+.chart-card {
+    min-width: 0;
+}
+
+.chart-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    margin-bottom: 16px;
+}
+
+/* Справа оставляем место под подписи оси, снизу — под даты. */
+.chart-body {
+    position: relative;
+    padding-right: 44px;
+}
+
+.chart {
+    display: block;
+}
+
+.chart-grid {
+    stroke: var(--border-muted);
+    stroke-width: 1;
+}
+
+.chart-axis {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 180px;
+}
+
+.chart-axis span {
+    position: absolute;
+    right: 0;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: var(--fg-muted);
+}
+
+.chart-line {
+    fill: none;
+    stroke-width: 2;
+}
+
+.chart-line--danger {
+    stroke: var(--danger);
+}
+
+.chart-line--warning {
+    stroke: var(--warning);
+}
+
+.chart-dot--danger {
+    fill: var(--danger);
+}
+
+.chart-dot--warning {
+    fill: var(--warning);
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    color: var(--fg-muted);
+    font-size: 11px;
+}
+
+.chart-empty {
+    margin-top: 12px;
+    color: var(--fg-muted);
+    font-size: 12px;
+    text-align: center;
+}

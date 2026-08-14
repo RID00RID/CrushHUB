@@ -1,0 +1,43 @@
+﻿@model ProfileViewModel
+
+@{
+    Layout = "_AdminShell";
+    ViewData["Title"] = "Профиль";
+}
+
+<div class="admin-page admin-page--narrow">
+
+    <div class="admin-page-title">Профиль</div>
+
+    <form method="post" asp-action="SaveProfile">
+
+        <div class="field">
+            <label class="field-label" asp-for="Name"></label>
+            <input class="field-input" asp-for="Name" />
+            <span class="field-error" asp-validation-for="Name"></span>
+        </div>
+
+        <div class="field">
+            <label class="field-label" asp-for="Email"></label>
+            <input class="field-input" asp-for="Email" />
+            <span class="field-error" asp-validation-for="Email"></span>
+        </div>
+
+        <div class="field">
+            <label class="field-label" asp-for="Bio"></label>
+            <textarea class="field-input field-textarea" asp-for="Bio" rows="3" placeholder="Пара слов о себе"></textarea>
+            <span class="field-error" asp-validation-for="Bio"></span>
+        </div>
+
+        <div class="field-error" asp-validation-summary="ModelOnly"></div>
+
+        <button type="submit" class="btn btn-primary btn-save">Сохранить</button>
+
+        @if (Model.Saved)
+        {
+            <span class="saved-hint">Сохранено</span>
+        }
+
+    </form>
+
+</div>

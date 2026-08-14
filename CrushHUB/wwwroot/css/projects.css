@@ -1,0 +1,195 @@
+/* CrashHub — экран выбора проекта. */
+
+.projects-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border-muted);
+}
+
+.projects-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.projects-logo {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #fff;
+}
+
+.projects-brand-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--fg-bright);
+}
+
+.projects-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.projects-body {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.projects-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--fg-bright);
+    margin-bottom: 4px;
+}
+
+.projects-subtitle {
+    color: var(--fg-muted);
+    margin-bottom: 24px;
+}
+
+/* ---------- Создание проекта ---------- */
+
+.create-card {
+    margin-bottom: 24px;
+}
+
+.create-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.create-row .field {
+    flex: 1;
+    min-width: 220px;
+    margin-bottom: 0;
+}
+
+.create-submit {
+    padding: 8px 16px;
+}
+
+.key-box {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.key-caption {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
+}
+
+.key-value {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--code-accent);
+    word-break: break-all;
+}
+
+/* ---------- Список проектов ---------- */
+
+.section-label {
+    font-size: 11px;
+    color: var(--fg-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.project-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+    padding: 14px 18px;
+    text-decoration: none;
+}
+
+.project-card:hover {
+    border-color: var(--link);
+}
+
+.project-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--violet);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.project-icon span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.project-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg-bright);
+}
+
+.project-platform {
+    font-size: 12px;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+}
+
+.project-stats {
+    display: flex;
+    gap: 20px;
+    color: var(--fg-muted);
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.stat-crashes {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.stat-reports {
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.projects-empty {
+    color: var(--fg-muted);
+    font-size: 13px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    text-align: center;
+}
