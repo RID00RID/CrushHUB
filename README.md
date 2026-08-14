@@ -4,6 +4,37 @@ Self-hosted приём крашей и обращений игроков. Игр
 
 **Подходит любому движку** — Unreal, Unity, Godot, GameMaker, собственный: SDK не нужен, достаточно уметь отправить POST. Справочник запросов — [API.md](API.md).
 
+## Как выглядит
+
+**Dashboard** — сводка по проекту и графики за неделю.
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+**Crash Report** — краши с фильтром по статусу и сортировкой по дате.
+
+![Crash Report](docs/screenshots/crash-report.png)
+
+<details>
+<summary>Ещё экраны: карточка краша, обращения, пользователи</summary>
+
+**Карточка краша** — версия, платформа, машина, дата, callstack и смена статуса.
+
+![Карточка краша](docs/screenshots/crash-detail.png)
+
+**User Report** — обращения игроков с фильтрами по категории и статусу.
+
+![User Report](docs/screenshots/user-report.png)
+
+**Карточка обращения** — описание, вложение и статусы.
+
+![Карточка обращения](docs/screenshots/report-detail.png)
+
+**Пользователи** — машины игроков, их краши и обращения.
+
+![Пользователи](docs/screenshots/users.png)
+
+</details>
+
 ## Возможности
 
 - **Проекты** — по проекту на игру, у каждого свой ключ приложения.
