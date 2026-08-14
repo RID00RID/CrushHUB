@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using CrushHUB.Domain.Entities;
 
@@ -16,11 +17,13 @@ public class DiscordNotifier
     private const int DescriptionLimit = 1000;
 
     private readonly IHttpClientFactory _clients;
+    private readonly IWebHostEnvironment _environment;
     private readonly ILogger<DiscordNotifier> _log;
 
-    public DiscordNotifier(IHttpClientFactory clients, ILogger<DiscordNotifier> log)
+    public DiscordNotifier(IHttpClientFactory clients, IWebHostEnvironment environment, ILogger<DiscordNotifier> log)
     {
         _clients = clients;
+        _environment = environment;
         _log = log;
     }
 
@@ -62,7 +65,11 @@ public class DiscordNotifier
 
         AddField(fields, "System ID", systemId);
 
-        return SendAsync(project, new
+        // Скриншот прикладываем файлом: панель может быть недоступна из интернета,
+        // и ссылку на /uploads Discord тогда не заберёт.
+        string? screenshot = ResolveScreenshot(report.ScreenshotPath);
+
+        object payload = new
         {
             embeds = new[]
             {
@@ -73,11 +80,25 @@ public class DiscordNotifier
                     description = Trim(report.Description, DescriptionLimit),
                     color = ReportColor,
                     fields = fields.ToArray(),
+                    image = screenshot is null ? null : new { url = $"attachment://{Path.GetFileName(screenshot)}" },
                     footer = new { text = $"CrashHub · {project.Name}" },
                     timestamp = report.CreatedAt.ToUniversalTime().ToString("o")
                 }
             }
-        });
+        };
+
+        return SendAsync(project, payload, screenshot);
+    }
+
+    /// <summary>Путь к файлу скриншота на диске или null, если его нет.</summary>
+    private string? ResolveScreenshot(string? relativePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath))
+            return null;
+
+        string full = Path.Combine(_environment.WebRootPath, relativePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+
+        return File.Exists(full) ? full : null;
     }
 
     /// <summary>Проверочное сообщение из настроек проекта: здесь ошибку показываем администратору.</summary>
@@ -110,14 +131,14 @@ public class DiscordNotifier
         }
     }
 
-    private async Task SendAsync(Project project, object payload)
+    private async Task SendAsync(Project project, object payload, string? filePath = null)
     {
         if (string.IsNullOrWhiteSpace(project.DiscordWebhookUrl))
             return;
 
         try
         {
-            HttpResponseMessage response = await Post(project.DiscordWebhookUrl, payload);
+            HttpResponseMessage response = await Post(project.DiscordWebhookUrl, payload, filePath);
 
             if (!response.IsSuccessStatusCode)
                 _log.LogWarning("Discord вернул {Status} для проекта {Project}", response.StatusCode, project.Id);
@@ -128,15 +149,34 @@ public class DiscordNotifier
         }
     }
 
-    private async Task<HttpResponseMessage> Post(string webhookUrl, object payload)
+    private async Task<HttpResponseMessage> Post(string webhookUrl, object payload, string? filePath = null)
     {
         HttpClient client = _clients.CreateClient(nameof(DiscordNotifier));
-        client.Timeout = TimeSpan.FromSeconds(10);
+        client.Timeout = TimeSpan.FromSeconds(30);
 
-        string json = JsonSerializer.Serialize(payload);
+        string json = JsonSerializer.Serialize(payload, JsonOptions);
 
-        return await client.PostAsync(webhookUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+        if (filePath is null)
+            return await client.PostAsync(webhookUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+
+        using MultipartFormDataContent form = new();
+        form.Add(new StringContent(json, Encoding.UTF8, "application/json"), "payload_json");
+
+        ByteArrayContent file = new(await File.ReadAllBytesAsync(filePath));
+        file.Headers.ContentType = new MediaTypeHeaderValue(ContentTypeOf(filePath));
+        form.Add(file, "files[0]", Path.GetFileName(filePath));
+
+        return await client.PostAsync(webhookUrl, form);
     }
+
+    private static string ContentTypeOf(string path) =>
+        Path.GetExtension(path).Equals(".png", StringComparison.OrdinalIgnoreCase) ? "image/png" : "image/jpeg";
+
+    /// <summary>Discord не принимает null-поля в embed, поэтому пустые не сериализуем.</summary>
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+    };
 
     private static void AddField(List<object> fields, string name, string? value)
     {
