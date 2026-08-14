@@ -117,10 +117,10 @@
 
 /* Заголовок админской области в сайдбаре: над ним разделитель, как в GitHub. */
 .cabinet-nav-group {
-    margin: 16px 0 4px;
-    padding-top: 14px;
+    margin: 20px 0 6px;
     border-top: 1px solid var(--border-muted);
-    padding: 0 10px;
+    /* Одним объявлением: раздельные padding-top и padding перетирали друг друга. */
+    padding: 20px 10px 0;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
