@@ -1,3 +1,4 @@
+using System.Net;
 using CrushHUB.Domain;
 using CrushHUB.Domain.Entities;
 using CrushHUB.Domain.Repositoryes.Abstract;
@@ -42,7 +43,21 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ScreenshotStorage>();
 builder.Services.AddScoped<GameUserRegistry>();
 
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient(nameof(DiscordNotifier))
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        HttpClientHandler handler = new();
+        string? proxyUrl = appConfig.Notifications.ProxyUrl;
+
+        if (!string.IsNullOrWhiteSpace(proxyUrl))
+        {
+            handler.Proxy = new WebProxy(proxyUrl);
+            handler.UseProxy = true;
+        }
+
+        return handler;
+    });
+
 builder.Services.AddScoped<DiscordNotifier>();
 
 builder.Services.AddSingleton(appConfig);
