@@ -74,6 +74,9 @@ public class MemberViewModel
 
     public string Name { get; init; } = string.Empty;
 
+    /// <summary>Логин для входа — он же может отличаться от почты.</summary>
+    public string UserName { get; init; } = string.Empty;
+
     public string Email { get; init; } = string.Empty;
 
     public string? Role { get; init; }
@@ -88,6 +91,12 @@ public class CreateUserViewModel
     [StringLength(100, ErrorMessage = "Имя не длиннее 100 символов")]
     [Display(Name = "Имя")]
     public string? Name { get; set; }
+
+    [Required(ErrorMessage = "Укажите логин")]
+    [StringLength(50, MinimumLength = 3, ErrorMessage = "Логин от 3 до 50 символов")]
+    [RegularExpression("^[a-zA-Z0-9._-]+$", ErrorMessage = "Логин: латиница, цифры, точка, дефис и подчёркивание")]
+    [Display(Name = "Логин")]
+    public string? UserName { get; set; }
 
     [Required(ErrorMessage = "Укажите почту")]
     [EmailAddress(ErrorMessage = "Похоже, это не почта")]

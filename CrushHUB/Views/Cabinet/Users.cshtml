@@ -43,6 +43,12 @@
                     </div>
 
                     <div class="field">
+                        <label class="field-label" asp-for="Create.UserName"></label>
+                        <input class="field-input" asp-for="Create.UserName" placeholder="mvolkova" autocomplete="off" />
+                        <span class="field-error" asp-validation-for="Create.UserName"></span>
+                    </div>
+
+                    <div class="field">
                         <label class="field-label" asp-for="Create.Email"></label>
                         <input class="field-input" asp-for="Create.Email" placeholder="maria@studio.dev" />
                         <span class="field-error" asp-validation-for="Create.Email"></span>
@@ -81,6 +87,7 @@
 
         <div class="members-head">
             <div>Имя</div>
+            <div>Логин</div>
             <div>Email</div>
             <div>Роль</div>
             <div></div>
@@ -91,6 +98,7 @@
             <div class="member-row">
 
                 <div class="member-name">@member.Name</div>
+                <div class="member-login">@member.UserName</div>
                 <div class="member-email">@member.Email</div>
 
                 <div>
