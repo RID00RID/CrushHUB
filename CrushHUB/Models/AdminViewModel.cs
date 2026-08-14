@@ -107,6 +107,12 @@ public class MemberViewModel
 
     /// <summary>Себя нельзя ни удалить, ни разжаловать — иначе можно закрыть себе доступ.</summary>
     public bool IsCurrentUser { get; init; }
+
+    /// <summary>Базовый администратор: правит себя только сам, роль и удаление закрыты всем.</summary>
+    public bool IsSuperUser { get; init; }
+
+    /// <summary>Показывать ли карандаш: чужой суперпользователь недоступен.</summary>
+    public bool CanEdit { get; init; }
 }
 
 public class CreateUserViewModel

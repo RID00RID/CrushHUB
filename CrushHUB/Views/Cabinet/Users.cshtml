@@ -135,30 +135,46 @@
         {
             <div class="member-row">
 
-                <div class="member-name">@member.Name</div>
+                <div class="member-name">
+                    @member.Name
+                    @if (member.IsSuperUser)
+                    {
+                        <span class="member-super" title="Базовый администратор: правит себя только сам">Super User</span>
+                    }
+                </div>
                 <div class="member-login">@member.UserName</div>
                 <div class="member-email">@member.Email</div>
 
                 <div>
-                    <form method="post" asp-action="ChangeRole">
-                        <input type="hidden" name="userId" value="@member.Id" />
-                        <select class="role-select" name="role" disabled="@member.IsCurrentUser">
-                            @foreach (string role in RoleNames.All)
-                            {
-                                <option value="@role" selected="@(role == member.Role)">@RoleNames.Display(role)</option>
-                            }
-                        </select>
-                    </form>
+                    @if (member.IsSuperUser)
+                    {
+                        <span class="member-role-fixed">@RoleNames.Display(member.Role)</span>
+                    }
+                    else
+                    {
+                        <form method="post" asp-action="ChangeRole">
+                            <input type="hidden" name="userId" value="@member.Id" />
+                            <select class="role-select" name="role" disabled="@member.IsCurrentUser">
+                                @foreach (string role in RoleNames.All)
+                                {
+                                    <option value="@role" selected="@(role == member.Role)">@RoleNames.Display(role)</option>
+                                }
+                            </select>
+                        </form>
+                    }
                 </div>
 
                 <div class="member-actions">
+                    @if (member.CanEdit)
+                    {
                     <a class="btn-icon" asp-action="Users" asp-route-edit="@member.Id" title="Изменить" aria-label="Изменить">
                         <svg viewBox="0 0 16 16" aria-hidden="true">
                             <path d="M11.2 2.3l2.5 2.5-8 8-3.2.7.7-3.2z" />
                             <path d="M10 3.5l2.5 2.5" />
                         </svg>
                     </a>
-                    @if (!member.IsCurrentUser)
+                    }
+                    @if (!member.IsCurrentUser && !member.IsSuperUser)
                     {
                         <form method="post" asp-action="DeleteUser"
                               onsubmit="return confirm('Удалить пользователя? Действие необратимо.');">
