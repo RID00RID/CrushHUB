@@ -20,10 +20,12 @@ public partial class HomeController : Controller
     private readonly IRepository<Crash> _crashes;
     private readonly IRepository<UserReport> _reports;
     private readonly IRepository<GameUser> _gameUsers;
+    private readonly DiscordNotifier _discord;
 
     public HomeController(IRepository<Project> projects, IRepository<Crash> crashes,
-        IRepository<UserReport> reports, IRepository<GameUser> gameUsers)
+        IRepository<UserReport> reports, IRepository<GameUser> gameUsers, DiscordNotifier discord)
     {
+        _discord = discord;
         _projects = projects;
         _crashes = crashes;
         _reports = reports;

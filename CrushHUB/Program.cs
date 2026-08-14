@@ -42,6 +42,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ScreenshotStorage>();
 builder.Services.AddScoped<GameUserRegistry>();
 
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<DiscordNotifier>();
+
 builder.Services.AddSingleton(appConfig);
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));

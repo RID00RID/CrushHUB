@@ -48,6 +48,56 @@
         </div>
     </div>
 
+
+    <div class="card settings-card">
+        <div class="settings-card-header">
+            <div class="settings-heading">Уведомления в Discord</div>
+            @if (User.IsInRole(RoleNames.Admin) && !string.IsNullOrEmpty(Model.DiscordWebhookUrl))
+            {
+                <form method="post" asp-action="TestDiscord" asp-route-id="@Model.Id">
+                    <button type="submit" class="btn-secondary">Отправить тест</button>
+                </form>
+            }
+        </div>
+
+        <form method="post" asp-action="SaveNotifications" asp-route-id="@Model.Id">
+
+            <div class="settings-row">
+                <input class="field-input" asp-for="DiscordWebhookUrl"
+                       placeholder="https://discord.com/api/webhooks/…" />
+                <button type="submit" class="btn-secondary">Сохранить</button>
+            </div>
+            <span class="field-error" asp-validation-for="DiscordWebhookUrl"></span>
+
+            <div class="settings-note">
+                В канале Discord: Настройки канала → Интеграции → Вебхуки → Создать вебхук → Копировать URL.
+                Пустое поле выключает уведомления.
+            </div>
+
+            <div class="notify-toggles">
+                <label class="notify-toggle">
+                    <input asp-for="NotifyOnCrash" />
+                    <span>Краши</span>
+                </label>
+                <label class="notify-toggle">
+                    <input asp-for="NotifyOnReport" />
+                    <span>Обращения игроков</span>
+                </label>
+            </div>
+
+            @if (Model.NotificationsSaved)
+            {
+                <div class="settings-saved">Сохранено</div>
+            }
+
+            @if (Model.TestResult is not null)
+            {
+                <div class="settings-saved">@Model.TestResult</div>
+            }
+
+        </form>
+    </div>
+
     @if (User.IsInRole(RoleNames.Admin))
     {
         <div class="danger-card">
