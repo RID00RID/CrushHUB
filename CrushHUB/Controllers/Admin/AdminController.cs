@@ -16,13 +16,16 @@ namespace CrushHUB.Controllers;
 public partial class AdminController : Controller
 {
     public const string ProfileTab = "profile";
+    public const string SecurityTab = "security";
     public const string UsersTab = "users";
 
     private readonly UserManager<AppUser> _users;
+    private readonly SignInManager<AppUser> _signIn;
 
-    public AdminController(UserManager<AppUser> users)
+    public AdminController(UserManager<AppUser> users, SignInManager<AppUser> signIn)
     {
         _users = users;
+        _signIn = signIn;
     }
 
     [HttpGet]

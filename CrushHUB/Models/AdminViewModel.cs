@@ -34,6 +34,28 @@ public class ProfileViewModel
     public bool Saved { get; init; }
 }
 
+public class ChangePasswordViewModel
+{
+    [Required(ErrorMessage = "Введите текущий пароль")]
+    [DataType(DataType.Password)]
+    [Display(Name = "Текущий пароль")]
+    public string? CurrentPassword { get; set; }
+
+    [Required(ErrorMessage = "Введите новый пароль")]
+    [StringLength(100, MinimumLength = 6, ErrorMessage = "Пароль не короче 6 символов")]
+    [DataType(DataType.Password)]
+    [Display(Name = "Новый пароль")]
+    public string? NewPassword { get; set; }
+
+    [Required(ErrorMessage = "Повторите новый пароль")]
+    [Compare(nameof(NewPassword), ErrorMessage = "Пароли не совпадают")]
+    [DataType(DataType.Password)]
+    [Display(Name = "Повторите пароль")]
+    public string? ConfirmPassword { get; set; }
+
+    public bool Saved { get; init; }
+}
+
 public class UsersViewModel
 {
     public IReadOnlyList<MemberViewModel> Members { get; init; } = [];
