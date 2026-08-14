@@ -25,9 +25,12 @@ services:
     volumes:
       # Скриншоты обращений переживают пересборку контейнера.
       - crushhub_uploads:/app/wwwroot/uploads
+      # Ключи шифрования кук: без тома пользователей разлогинивает при каждом обновлении.
+      - crushhub_keys:/root/.aspnet/DataProtection-Keys
     ports:
       - "127.0.0.1:${APP_PORT:-5199}:8080"
 
 volumes:
   crushhub_pg_data:
   crushhub_uploads:
+  crushhub_keys:
