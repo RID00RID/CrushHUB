@@ -49,6 +49,8 @@
             <nav class="admin-nav">
                 <a class="admin-nav-item @(activeTab == AdminController.ProfileTab ? "admin-nav-item--active" : null)"
                    asp-controller="Admin" asp-action="Profile">Профиль</a>
+                <a class="admin-nav-item @(activeTab == AdminController.SecurityTab ? "admin-nav-item--active" : null)"
+                   asp-controller="Admin" asp-action="Security">Безопасность</a>
                 <a class="admin-nav-item @(activeTab == AdminController.UsersTab ? "admin-nav-item--active" : null)"
                    asp-controller="Admin" asp-action="Users">Пользователи</a>
             </nav>

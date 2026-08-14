@@ -1,0 +1,44 @@
+﻿@model ChangePasswordViewModel
+
+@{
+    Layout = "_AdminShell";
+    ViewData["Title"] = "Безопасность";
+}
+
+<div class="admin-page admin-page--narrow">
+
+    <div class="admin-page-title">Безопасность</div>
+    <div class="admin-page-subtitle">Смена пароля от панели</div>
+
+    <form method="post" asp-action="ChangePassword">
+
+        <div class="field">
+            <label class="field-label" asp-for="CurrentPassword"></label>
+            <input class="field-input" asp-for="CurrentPassword" autocomplete="current-password" />
+            <span class="field-error" asp-validation-for="CurrentPassword"></span>
+        </div>
+
+        <div class="field">
+            <label class="field-label" asp-for="NewPassword"></label>
+            <input class="field-input" asp-for="NewPassword" autocomplete="new-password" />
+            <span class="field-error" asp-validation-for="NewPassword"></span>
+        </div>
+
+        <div class="field">
+            <label class="field-label" asp-for="ConfirmPassword"></label>
+            <input class="field-input" asp-for="ConfirmPassword" autocomplete="new-password" />
+            <span class="field-error" asp-validation-for="ConfirmPassword"></span>
+        </div>
+
+        <div class="field-error" asp-validation-summary="ModelOnly"></div>
+
+        <button type="submit" class="btn btn-primary btn-save">Сменить пароль</button>
+
+        @if (Model.Saved)
+        {
+            <span class="saved-hint">Пароль изменён</span>
+        }
+
+    </form>
+
+</div>
