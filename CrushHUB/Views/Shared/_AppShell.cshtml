@@ -12,6 +12,7 @@
 }
 
 @section Scripts {
+    <script src="~/js/account-menu.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", false)
 }
 
@@ -39,6 +40,10 @@
                 </a>
             }
         </nav>
+
+        <div class="topbar-spacer"></div>
+
+        @await Component.InvokeAsync("AccountMenu")
 
     </div>
 

@@ -9,9 +9,9 @@
 
 /* ---------- Верхняя панель ---------- */
 
-.admin-topbar {
+.cabinet-topbar {
     flex-shrink: 0;
-    height: 56px;
+    height: 60px;
     background: var(--bg-inset);
     border-bottom: 1px solid var(--border-muted);
     display: flex;
@@ -20,14 +20,14 @@
     padding: 0 32px;
 }
 
-.admin-brand {
+.cabinet-brand {
     display: flex;
     align-items: center;
     gap: 8px;
     text-decoration: none;
 }
 
-.admin-logo {
+.cabinet-logo {
     width: 24px;
     height: 24px;
     border-radius: var(--radius-sm);
@@ -40,25 +40,25 @@
     color: #fff;
 }
 
-.admin-brand-title {
+.cabinet-brand-title {
     font-size: 13px;
     font-weight: 600;
     color: var(--fg-bright);
 }
 
-.admin-topbar-spacer {
+.cabinet-topbar-spacer {
     flex: 1;
 }
 
 /* ---------- Сайдбар ---------- */
 
-.admin-main {
+.cabinet-main {
     flex: 1;
     display: flex;
     min-height: 0;
 }
 
-.admin-side {
+.cabinet-side {
     width: 260px;
     flex-shrink: 0;
     border-right: 1px solid var(--border-muted);
@@ -66,18 +66,18 @@
     overflow-y: auto;
 }
 
-.admin-account {
+.cabinet-account {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 0 8px 20px 8px;
 }
 
-.admin-account-info {
+.cabinet-account-info {
     min-width: 0;
 }
 
-.admin-account-name {
+.cabinet-account-name {
     font-size: 14px;
     font-weight: 600;
     color: var(--fg-bright);
@@ -86,18 +86,29 @@
     white-space: nowrap;
 }
 
-.admin-account-note {
+.cabinet-account-note {
     font-size: 12px;
     color: var(--fg-muted);
 }
 
-.admin-nav {
+.cabinet-nav {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-.admin-nav-item {
+/* Заголовок админской области в сайдбаре. */
+.cabinet-nav-group {
+    margin: 14px 0 4px;
+    padding: 0 10px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    color: var(--fg-muted);
+}
+
+.cabinet-nav-item {
     padding: 8px 10px;
     border-radius: var(--radius-sm);
     font-size: 13px;
@@ -106,51 +117,51 @@
     text-decoration: none;
 }
 
-.admin-nav-item:hover {
+.cabinet-nav-item:hover {
     color: var(--fg-bright);
 }
 
-.admin-nav-item--active {
+.cabinet-nav-item--active {
     color: var(--fg-bright);
     background: var(--bg-surface);
 }
 
 /* ---------- Контент ---------- */
 
-.admin-content {
+.cabinet-content {
     flex: 1;
     min-width: 0;
     overflow: auto;
 }
 
-.admin-page {
+.cabinet-page {
     max-width: 900px;
     padding: 32px;
 }
 
-.admin-page--narrow {
+.cabinet-page--narrow {
     max-width: 560px;
 }
 
-.admin-page-title {
+.cabinet-page-title {
     font-size: 20px;
     font-weight: 600;
     color: var(--fg-bright);
     margin-bottom: 4px;
 }
 
-.admin-page-subtitle {
+.cabinet-page-subtitle {
     color: var(--fg-muted);
     margin-bottom: 24px;
 }
 
-.admin-page-actions {
+.cabinet-page-actions {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
 }
 
-.admin-error {
+.cabinet-error {
     color: var(--danger);
     font-size: 12px;
     margin-bottom: 16px;

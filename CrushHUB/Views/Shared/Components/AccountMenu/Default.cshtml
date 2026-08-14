@@ -1,45 +1,40 @@
 ﻿@model AccountCardViewModel
 
-@if (!Model.IsAdmin)
-{
-    <form method="post" asp-controller="Account" asp-action="Logout">
-        <button type="submit" class="btn-link">Выйти</button>
-    </form>
-}
-else
-{
-    <div class="account-menu" data-account-menu>
+<div class="account-menu" data-account-menu>
 
-        <button type="button" class="account-menu-trigger" data-account-menu-toggle>
-            <span class="avatar">@Model.Initial</span>
-        </button>
+    <button type="button" class="account-menu-trigger" data-account-menu-toggle>
+        <span class="avatar">@Model.Initial</span>
+    </button>
 
-        <div class="account-menu-overlay" data-account-menu-close></div>
+    <div class="account-menu-overlay" data-account-menu-close></div>
 
-        <div class="account-menu-popup">
+    <div class="account-menu-popup">
 
-            <div class="account-menu-head">
-                <div class="avatar">@Model.Initial</div>
-                <div class="account-menu-info">
-                    <div class="account-menu-name">@Model.Name</div>
-                    <div class="account-menu-email">@Model.Email</div>
-                </div>
+        <div class="account-menu-head">
+            <div class="avatar">@Model.Initial</div>
+            <div class="account-menu-info">
+                <div class="account-menu-name">@Model.Name</div>
+                <div class="account-menu-email">@Model.Email</div>
             </div>
+        </div>
 
-            <div class="account-menu-group">
-                <a class="account-menu-item" asp-controller="Admin" asp-action="Profile">Профиль</a>
-                <a class="account-menu-item" asp-controller="Admin" asp-action="Users">Пользователи</a>
-            </div>
+        <div class="account-menu-group">
+            <a class="account-menu-item" asp-controller="Cabinet" asp-action="Profile">Профиль</a>
+            <a class="account-menu-item" asp-controller="Cabinet" asp-action="Security">Безопасность</a>
+            @if (Model.IsAdmin)
+            {
+                <a class="account-menu-item" asp-controller="Cabinet" asp-action="Users">Пользователи</a>
+            }
+        </div>
 
-            <div class="account-menu-divider"></div>
+        <div class="account-menu-divider"></div>
 
-            <div class="account-menu-group">
-                <form method="post" asp-controller="Account" asp-action="Logout">
-                    <button type="submit" class="account-menu-item account-menu-item--danger">Выйти</button>
-                </form>
-            </div>
-
+        <div class="account-menu-group">
+            <form method="post" asp-controller="Account" asp-action="Logout">
+                <button type="submit" class="account-menu-item account-menu-item--danger">Выйти</button>
+            </form>
         </div>
 
     </div>
-}
+
+</div>

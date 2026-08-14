@@ -1,0 +1,70 @@
+﻿@{
+    Layout = "_Layout";
+
+    string activeTab = ViewData["CabinetTab"] as string ?? string.Empty;
+    AccountCardViewModel account = ViewData["Account"] as AccountCardViewModel ?? new AccountCardViewModel();
+}
+
+@* Секции страницы проходят через этот слой к _Layout. *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/cabinet.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", false)
+}
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", false)
+}
+
+<div class="admin">
+
+    <div class="cabinet-topbar">
+
+        <a class="cabinet-brand" asp-controller="Home" asp-action="Index">
+            <div class="cabinet-logo">@account.Initial</div>
+            <div class="cabinet-brand-title">CrashHub &middot; Личный кабинет</div>
+        </a>
+
+        <div class="cabinet-topbar-spacer"></div>
+
+        <a class="link" asp-controller="Home" asp-action="Index">&larr; К проектам</a>
+
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <button type="submit" class="btn-link">Выйти</button>
+        </form>
+
+    </div>
+
+    <div class="cabinet-main">
+
+        <aside class="cabinet-side">
+
+            <div class="cabinet-account">
+                <div class="avatar avatar--lg">@account.Initial</div>
+                <div class="cabinet-account-info">
+                    <div class="cabinet-account-name">@account.Name</div>
+                    <div class="cabinet-account-note">Ваш аккаунт</div>
+                </div>
+            </div>
+
+            <nav class="cabinet-nav">
+                <a class="cabinet-nav-item @(activeTab == CabinetController.ProfileTab ? "cabinet-nav-item--active" : null)"
+                   asp-controller="Cabinet" asp-action="Profile">Профиль</a>
+                <a class="cabinet-nav-item @(activeTab == CabinetController.SecurityTab ? "cabinet-nav-item--active" : null)"
+                   asp-controller="Cabinet" asp-action="Security">Безопасность</a>
+                @if (account.IsAdmin)
+                {
+                    <div class="cabinet-nav-group">Администрирование</div>
+                    <a class="cabinet-nav-item @(activeTab == CabinetController.UsersTab ? "cabinet-nav-item--active" : null)"
+                       asp-controller="Cabinet" asp-action="Users">Пользователи</a>
+                }
+            </nav>
+
+        </aside>
+
+        <div class="cabinet-content">
+            @RenderBody()
+        </div>
+
+    </div>
+
+</div>
