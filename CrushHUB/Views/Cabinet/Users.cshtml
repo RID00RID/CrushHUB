@@ -83,6 +83,44 @@
         </div>
     }
 
+    @if (Model.Edit is not null)
+    {
+        <div class="card create-user">
+
+            <div class="card-title">Редактирование: @Model.Edit.UserName</div>
+
+            <form method="post" asp-action="EditUser">
+
+                <input type="hidden" asp-for="Edit.Id" />
+
+                <div class="create-user-grid">
+
+                    <div class="field">
+                        <label class="field-label" asp-for="Edit.Name"></label>
+                        <input class="field-input" asp-for="Edit.Name" />
+                        <span class="field-error" asp-validation-for="Edit.Name"></span>
+                    </div>
+
+                    <div class="field">
+                        <label class="field-label" asp-for="Edit.NewPassword"></label>
+                        <input class="field-input" asp-for="Edit.NewPassword" placeholder="оставьте пустым, чтобы не менять" autocomplete="new-password" />
+                        <span class="field-error" asp-validation-for="Edit.NewPassword"></span>
+                    </div>
+
+                </div>
+
+                <div class="edit-user-note">Логин @Model.Edit.UserName и почта @Model.Edit.Email не меняются.</div>
+
+                <div class="create-user-buttons">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <a class="btn-secondary btn-cancel" asp-action="Users">Отмена</a>
+                </div>
+
+            </form>
+
+        </div>
+    }
+
     <div class="members">
 
         <div class="members-head">
@@ -114,6 +152,7 @@
                 </div>
 
                 <div class="member-actions">
+                    <a class="btn-secondary" asp-action="Users" asp-route-edit="@member.Id">Изменить</a>
                     @if (!member.IsCurrentUser)
                     {
                         <form method="post" asp-action="DeleteUser"

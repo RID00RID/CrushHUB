@@ -65,7 +65,31 @@ public class UsersViewModel
     /// <summary>Развёрнута ли карточка «Новый пользователь».</summary>
     public bool IsCreating { get; init; }
 
+    /// <summary>Заполнена, когда открыта карточка редактирования участника.</summary>
+    public EditUserViewModel? Edit { get; init; }
+
     public string? Error { get; init; }
+}
+
+public class EditUserViewModel
+{
+    [Required]
+    public string Id { get; set; } = string.Empty;
+
+    /// <summary>Логин и почта показываются только для опознания — здесь они не меняются.</summary>
+    public string UserName { get; init; } = string.Empty;
+
+    public string Email { get; init; } = string.Empty;
+
+    [Required(ErrorMessage = "Укажите имя")]
+    [StringLength(100, ErrorMessage = "Имя не длиннее 100 символов")]
+    [Display(Name = "Имя")]
+    public string? Name { get; set; }
+
+    [StringLength(100, MinimumLength = 6, ErrorMessage = "Пароль не короче 6 символов")]
+    [DataType(DataType.Password)]
+    [Display(Name = "Новый пароль")]
+    public string? NewPassword { get; set; }
 }
 
 public class MemberViewModel
