@@ -1,16 +1,16 @@
 ﻿@model UsersViewModel
 
 @{
-    Layout = "_AdminShell";
+    Layout = "_CabinetShell";
     ViewData["Title"] = "Пользователи";
 }
 
-<div class="admin-page">
+<div class="cabinet-page">
 
-    <div class="admin-page-title">Пользователи</div>
-    <div class="admin-page-subtitle">Управление ролями участников системы CrashHub</div>
+    <div class="cabinet-page-title">Пользователи</div>
+    <div class="cabinet-page-subtitle">Управление ролями участников системы CrashHub</div>
 
-    <div class="admin-page-actions">
+    <div class="cabinet-page-actions">
         @if (Model.IsCreating)
         {
             <a class="btn-violet" asp-action="Users">Скрыть</a>
@@ -23,7 +23,7 @@
 
     @if (Model.Error is not null)
     {
-        <div class="admin-error">@Model.Error</div>
+        <div class="cabinet-error">@Model.Error</div>
     }
 
     @if (Model.IsCreating)

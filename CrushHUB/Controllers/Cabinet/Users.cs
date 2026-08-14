@@ -1,17 +1,19 @@
 ﻿using CrushHUB.Domain.Entities;
 using CrushHUB.Models;
 using CrushHUB.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrushHUB.Controllers;
 
-public partial class AdminController
+public partial class CabinetController
 {
     private const string UsersErrorKey = "UsersError";
 
     [HttpGet]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> Users(bool create = false)
     {
         if (await LoadShell(UsersTab) is null)
@@ -22,6 +24,7 @@ public partial class AdminController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> CreateUser(CreateUserViewModel create)
     {
         if (await LoadShell(UsersTab) is null)
@@ -66,6 +69,7 @@ public partial class AdminController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> ChangeRole(string userId, string role)
     {
         if (!RoleNames.All.Contains(role))
@@ -94,6 +98,7 @@ public partial class AdminController
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = RoleNames.Admin)]
     public async Task<IActionResult> DeleteUser(string userId)
     {
         AppUser? user = await _users.FindByIdAsync(userId);

@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace CrushHUB.Controllers;
 
 /// <summary>
-/// Общая часть раздела администрирования: каркас с сайдбаром. Сами вкладки
-/// вынесены в отдельные части этого же контроллера (Profile.cs, Users.cs).
-/// Раздел целиком доступен только администраторам.
+/// Общая часть личного кабинета: каркас с сайдбаром. Вкладки вынесены в отдельные
+/// части этого же контроллера (Profile.cs, Security.cs, Users.cs). Кабинет открыт
+/// любому вошедшему; администраторская область — только «Пользователи».
 /// </summary>
-[Authorize(Roles = RoleNames.Admin)]
-public partial class AdminController : Controller
+[Authorize]
+public partial class CabinetController : Controller
 {
     public const string ProfileTab = "profile";
     public const string SecurityTab = "security";
@@ -22,7 +22,7 @@ public partial class AdminController : Controller
     private readonly UserManager<AppUser> _users;
     private readonly SignInManager<AppUser> _signIn;
 
-    public AdminController(UserManager<AppUser> users, SignInManager<AppUser> signIn)
+    public CabinetController(UserManager<AppUser> users, SignInManager<AppUser> signIn)
     {
         _users = users;
         _signIn = signIn;
@@ -39,12 +39,12 @@ public partial class AdminController : Controller
         if (user is null)
             return null;
 
-        ViewData["AdminTab"] = tab;
+        ViewData["CabinetTab"] = tab;
         ViewData["Account"] = new AccountCardViewModel
         {
             Name = DisplayNameOf(user),
             Email = user.Email ?? string.Empty,
-            IsAdmin = true
+            IsAdmin = User.IsInRole(RoleNames.Admin)
         };
 
         return user;

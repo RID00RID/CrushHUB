@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CrushHUB.Controllers;
 
-public partial class AdminController
+public partial class CabinetController
 {
     private const string PasswordChangedKey = "PasswordChanged";
 
