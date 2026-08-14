@@ -24,15 +24,18 @@ public class IngestController : ControllerBase
     private readonly IRepository<UserReport> _reports;
     private readonly ScreenshotStorage _screenshots;
     private readonly GameUserRegistry _gameUsers;
+    private readonly DiscordNotifier _discord;
 
     public IngestController(IRepository<Project> projects, IRepository<Crash> crashes,
-        IRepository<UserReport> reports, ScreenshotStorage screenshots, GameUserRegistry gameUsers)
+        IRepository<UserReport> reports, ScreenshotStorage screenshots, GameUserRegistry gameUsers,
+        DiscordNotifier discord)
     {
         _projects = projects;
         _crashes = crashes;
         _reports = reports;
         _screenshots = screenshots;
         _gameUsers = gameUsers;
+        _discord = discord;
     }
 
     /// <summary>Проверка ключа: удобно дёрнуть первым, чтобы убедиться в настройках.</summary>
@@ -92,6 +95,8 @@ public class IngestController : ControllerBase
         await _crashes.AddAsync(crash);
         await _crashes.SaveChangesAsync();
 
+        await _discord.NotifyCrashAsync(project, crash, gameUser?.SystemId, BaseUrl());
+
         return Created($"/Home/Crashes/{project.Id}?crash={crash.Id}", new { id = crash.Id });
     }
 
@@ -131,8 +136,13 @@ public class IngestController : ControllerBase
         await _reports.AddAsync(report);
         await _reports.SaveChangesAsync();
 
+        await _discord.NotifyReportAsync(project, report, gameUser?.SystemId, BaseUrl());
+
         return Created($"/Home/Reports/{project.Id}?report={report.Id}", new { id = report.Id, screenshot = screenshotPath });
     }
+
+    /// <summary>Адрес панели для ссылок в уведомлениях — берём из запроса, домен нигде не зашит.</summary>
+    private string BaseUrl() => $"{Request.Scheme}://{Request.Host}";
 
     /// <summary>Ключ из заголовка должен принадлежать именно тому проекту, что указан в адресе.</summary>
     private async Task<Project?> Authorize(int projectId)

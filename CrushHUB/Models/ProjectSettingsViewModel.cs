@@ -15,4 +15,20 @@ public class ProjectSettingsViewModel
     public string ServerUrl { get; init; } = string.Empty;
 
     public string ApiKey { get; init; } = string.Empty;
+
+    [Url(ErrorMessage = "Похоже, это не адрес вебхука")]
+    [StringLength(300)]
+    [Display(Name = "Вебхук Discord")]
+    public string? DiscordWebhookUrl { get; set; }
+
+    [Display(Name = "Краши")]
+    public bool NotifyOnCrash { get; set; } = true;
+
+    [Display(Name = "Обращения игроков")]
+    public bool NotifyOnReport { get; set; } = true;
+
+    /// <summary>Результат проверки вебхука: пусто — проверку не запускали.</summary>
+    public string? TestResult { get; init; }
+
+    public bool NotificationsSaved { get; init; }
 }

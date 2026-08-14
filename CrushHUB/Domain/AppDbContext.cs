@@ -30,6 +30,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
             project.Property(p => p.Name).IsRequired().HasMaxLength(100);
             project.Property(p => p.Platform).IsRequired().HasMaxLength(50);
             project.Property(p => p.ApiKey).IsRequired().HasMaxLength(64);
+            project.Property(p => p.DiscordWebhookUrl).HasMaxLength(300);
             project.HasIndex(p => p.ApiKey).IsUnique();
         });
 
