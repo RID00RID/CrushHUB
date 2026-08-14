@@ -152,7 +152,12 @@
                 </div>
 
                 <div class="member-actions">
-                    <a class="btn-secondary" asp-action="Users" asp-route-edit="@member.Id">Изменить</a>
+                    <a class="btn-icon" asp-action="Users" asp-route-edit="@member.Id" title="Изменить" aria-label="Изменить">
+                        <svg viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M11.2 2.3l2.5 2.5-8 8-3.2.7.7-3.2z" />
+                            <path d="M10 3.5l2.5 2.5" />
+                        </svg>
+                    </a>
                     @if (!member.IsCurrentUser)
                     {
                         <form method="post" asp-action="DeleteUser"

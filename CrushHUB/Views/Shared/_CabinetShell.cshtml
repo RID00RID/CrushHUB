@@ -47,16 +47,40 @@
             </div>
 
             <nav class="cabinet-nav">
+
                 <a class="cabinet-nav-item @(activeTab == CabinetController.ProfileTab ? "cabinet-nav-item--active" : null)"
-                   asp-controller="Cabinet" asp-action="Profile">Профиль</a>
+                   asp-controller="Cabinet" asp-action="Profile">
+                    <svg class="cabinet-nav-icon" viewBox="0 0 16 16" aria-hidden="true">
+                        <circle cx="8" cy="5" r="2.6" />
+                        <path d="M2.6 14c0-3 2.4-4.6 5.4-4.6s5.4 1.6 5.4 4.6" />
+                    </svg>
+                    Профиль
+                </a>
+
                 <a class="cabinet-nav-item @(activeTab == CabinetController.SecurityTab ? "cabinet-nav-item--active" : null)"
-                   asp-controller="Cabinet" asp-action="Security">Безопасность</a>
+                   asp-controller="Cabinet" asp-action="Security">
+                    <svg class="cabinet-nav-icon" viewBox="0 0 16 16" aria-hidden="true">
+                        <rect x="3" y="7" width="10" height="7" rx="1.5" />
+                        <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
+                    </svg>
+                    Безопасность
+                </a>
+
                 @if (account.IsAdmin)
                 {
                     <div class="cabinet-nav-group">Администрирование</div>
+
                     <a class="cabinet-nav-item @(activeTab == CabinetController.UsersTab ? "cabinet-nav-item--active" : null)"
-                       asp-controller="Cabinet" asp-action="Users">Пользователи</a>
+                       asp-controller="Cabinet" asp-action="Users">
+                        <svg class="cabinet-nav-icon" viewBox="0 0 16 16" aria-hidden="true">
+                            <circle cx="6" cy="5.5" r="2.3" />
+                            <path d="M1.6 13.5c0-2.6 2-4 4.4-4s4.4 1.4 4.4 4" />
+                            <path d="M11 3.6a2.3 2.3 0 0 1 0 4.4M11.6 9.8c1.7.4 2.8 1.6 2.8 3.7" />
+                        </svg>
+                        Пользователи
+                    </a>
                 }
+
             </nav>
 
         </aside>

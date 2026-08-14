@@ -21,6 +21,7 @@
         <div class="field">
             <label class="field-label" asp-for="NewPassword"></label>
             <input class="field-input" asp-for="NewPassword" autocomplete="new-password" />
+            <div class="field-hint">Не короче 6 символов, минимум одна цифра и одна строчная буква.</div>
             <span class="field-error" asp-validation-for="NewPassword"></span>
         </div>
 
