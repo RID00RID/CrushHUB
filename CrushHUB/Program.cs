@@ -49,6 +49,12 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 var app = builder.Build();
 
+// Миграции применяются на старте: приложение self-hosted, отдельного шага деплоя нет.
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+}
+
 app.UseStaticFiles();
 
 app.UseRouting();

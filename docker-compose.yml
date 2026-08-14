@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: crushhub
+      POSTGRES_USER: crushhub
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?укажите DB_PASSWORD в .env}
+    volumes:
+      - crushhub_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crushhub -d crushhub"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      Project__Database__ConnectionString: "Host=db;Port=5432;Database=crushhub;Username=crushhub;Password=${DB_PASSWORD}"
+    volumes:
+      # Скриншоты обращений переживают пересборку контейнера.
+      - crushhub_uploads:/app/wwwroot/uploads
+    ports:
+      - "127.0.0.1:${APP_PORT:-5199}:8080"
+
+volumes:
+  crushhub_pg_data:
+  crushhub_uploads:

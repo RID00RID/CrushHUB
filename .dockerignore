@@ -1,0 +1,7 @@
+**/bin
+**/obj
+.git
+.idea
+.claude
+docs
+*.md
