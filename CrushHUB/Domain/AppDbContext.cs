@@ -94,7 +94,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
         string adminName = "admin";
         string roleAdminId = "161B548E-0A90-43E0-A76E-0F34C60955B0";
         string roleMemberId = "2F5F5C1E-3A65-4F0C-9E5F-9F2A0B6C4D11";
-        string userAdminId = "4B00D67B-169D-459D-8BE0-5A1F9575F247";
+        string userAdminId = SuperUser.Id;
 
         modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole()
         {

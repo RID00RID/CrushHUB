@@ -21,7 +21,8 @@ public partial class CabinetController
 
         EditUserViewModel? editing = null;
 
-        if (!string.IsNullOrEmpty(edit) && await _users.FindByIdAsync(edit) is { } target)
+        if (!string.IsNullOrEmpty(edit) && await _users.FindByIdAsync(edit) is { } target
+            && (!SuperUser.Is(target) || IsCurrentUser(target)))
             editing = ToEditModel(target);
 
         return View(await BuildUsersViewModel(create, edit: editing));
@@ -39,6 +40,12 @@ public partial class CabinetController
 
         if (user is null)
             return RedirectToAction(nameof(Users));
+
+        if (SuperUser.Is(user) && !IsCurrentUser(user))
+        {
+            TempData[UsersErrorKey] = "Базового администратора может редактировать только он сам";
+            return RedirectToAction(nameof(Users));
+        }
 
         if (!ModelState.IsValid)
             return View(nameof(Users), await BuildUsersViewModel(false, edit: Merge(user, edit)));
@@ -162,6 +169,12 @@ public partial class CabinetController
         if (user is null)
             return RedirectToAction(nameof(Users));
 
+        if (SuperUser.Is(user))
+        {
+            TempData[UsersErrorKey] = "Роль базового администратора менять нельзя";
+            return RedirectToAction(nameof(Users));
+        }
+
         if (IsCurrentUser(user))
         {
             TempData[UsersErrorKey] = "Нельзя менять собственную роль";
@@ -187,6 +200,12 @@ public partial class CabinetController
 
         if (user is null)
             return RedirectToAction(nameof(Users));
+
+        if (SuperUser.Is(user))
+        {
+            TempData[UsersErrorKey] = "Базового администратора удалить нельзя";
+            return RedirectToAction(nameof(Users));
+        }
 
         if (IsCurrentUser(user))
         {
@@ -218,7 +237,9 @@ public partial class CabinetController
                 UserName = user.UserName ?? string.Empty,
                 Email = user.Email ?? string.Empty,
                 Role = roles.FirstOrDefault(),
-                IsCurrentUser = IsCurrentUser(user)
+                IsCurrentUser = IsCurrentUser(user),
+                IsSuperUser = SuperUser.Is(user),
+                CanEdit = !SuperUser.Is(user) || IsCurrentUser(user)
             });
         }
 
