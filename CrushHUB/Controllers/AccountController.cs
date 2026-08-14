@@ -9,10 +9,12 @@ namespace CrushHUB.Controllers;
 public class AccountController : Controller
 {
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly UserManager<AppUser> _userManager;
 
-    public AccountController(SignInManager<AppUser> signInManager)
+    public AccountController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
     {
         _signInManager = signInManager;
+        _userManager = userManager;
     }
 
     [HttpGet]
@@ -32,15 +34,31 @@ public class AccountController : Controller
         if(!ModelState.IsValid)
             return View(model);
 
-        Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Username!, model.Password!, model.RememberMe, false);
-        
+        string login = await ResolveUserName(model.Username!.Trim());
+
+        Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(login, model.Password!, model.RememberMe, false);
+
         if(result.Succeeded)
             return Redirect(returnUrl ?? "/");
-        
+
         ModelState.AddModelError(string.Empty, "неверный логин или пароль");
         return View(model);
     }
     
+    /// <summary>
+    /// Участников заводят по почте, а логином становится её часть до «собаки» —
+    /// поэтому вход принимаем и по логину, и по почте.
+    /// </summary>
+    private async Task<string> ResolveUserName(string login)
+    {
+        if (!login.Contains('@'))
+            return login;
+
+        AppUser? byEmail = await _userManager.FindByEmailAsync(login);
+
+        return byEmail?.UserName ?? login;
+    }
+
     [HttpGet]
     public IActionResult AccessDenied() => View();
 

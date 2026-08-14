@@ -37,6 +37,7 @@ public partial class CabinetController
             return View(nameof(Users), await BuildUsersViewModel(true, create));
 
         string email = create.Email!.Trim();
+        string userName = create.UserName!.Trim();
 
         if (await _users.FindByEmailAsync(email) is not null)
         {
@@ -44,9 +45,15 @@ public partial class CabinetController
             return View(nameof(Users), await BuildUsersViewModel(true, create));
         }
 
+        if (await _users.FindByNameAsync(userName) is not null)
+        {
+            ModelState.AddModelError("Create.UserName", "Такой логин уже занят");
+            return View(nameof(Users), await BuildUsersViewModel(true, create));
+        }
+
         AppUser user = new()
         {
-            UserName = await PickUserName(email),
+            UserName = userName,
             DisplayName = create.Name!.Trim(),
             Email = email,
             EmailConfirmed = true
@@ -117,14 +124,6 @@ public partial class CabinetController
         return RedirectToAction(nameof(Users));
     }
 
-    /// <summary>Логин берём из локальной части почты, при совпадении — почта целиком.</summary>
-    private async Task<string> PickUserName(string email)
-    {
-        string candidate = email.Split('@')[0];
-
-        return await _users.FindByNameAsync(candidate) is null ? candidate : email;
-    }
-
     private bool IsCurrentUser(AppUser user) => user.Id == _users.GetUserId(User);
 
     private async Task<UsersViewModel> BuildUsersViewModel(bool isCreating, CreateUserViewModel? create = null)
@@ -140,6 +139,7 @@ public partial class CabinetController
             {
                 Id = user.Id,
                 Name = DisplayNameOf(user),
+                UserName = user.UserName ?? string.Empty,
                 Email = user.Email ?? string.Empty,
                 Role = roles.FirstOrDefault(),
                 IsCurrentUser = IsCurrentUser(user)

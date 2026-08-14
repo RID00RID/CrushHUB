@@ -4,8 +4,8 @@ namespace CrushHUB.Models;
 
 public class LoginViewModel
 {
-    [Required]
-    [Display(Name = "Логин")]
+    [Required(ErrorMessage = "Введите логин или почту")]
+    [Display(Name = "Логин или почта")]
     public string? Username { get; set; }
     [Required]
     
